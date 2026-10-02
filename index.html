@@ -1,0 +1,1235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="author" content="Claude Opus 5.5">
+<title>Electric charge, field and potential: from point charges to rings and disks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,750&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAFCFE; --panel:#FFFFFF; --ink:#1B2333; --muted:#5D6880; --grid:#E4EAF2; --line:#CBD5E3;
+  --e:#2450D8; --v:#C42A8A; --hl:#58E4E9; --pos:#D9480F; --neg:#0B8F6E;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#10151F; --panel:#151C28; --ink:#E7ECF5; --muted:#98A3B8; --grid:#1F2836; --line:#2E3949;
+    --e:#86A6FF; --v:#F07CC4; --hl:#3FD3D9; --pos:#FF9F5A; --neg:#4FD8AE; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#10151F; --panel:#151C28; --ink:#E7ECF5; --muted:#98A3B8; --grid:#1F2836; --line:#2E3949;
+  --e:#86A6FF; --v:#F07CC4; --hl:#3FD3D9; --pos:#FF9F5A; --neg:#4FD8AE; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.5;}
+.wrap{max-width:1240px;margin:0 auto;padding:28px clamp(16px,3vw,36px) 48px}
+.parthead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;margin:64px 0 22px;padding-top:28px;border-top:1.5px solid var(--ink);scroll-margin-top:16px}
+h2.big{font-size:clamp(28px,3.6vw,44px);line-height:1.04;max-width:20ch;margin:0}
+.intro{margin-bottom:8px;position:relative}
+.byline{margin:10px 0 0;font-size:15px;color:var(--muted)}
+.lang{position:absolute;right:0;top:0;margin:0;font-size:15px}
+.lang a,footer a{color:var(--ink);font-weight:600;text-underline-offset:3px}
+.lede{margin-top:12px}
+.toc{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:18px}
+.toc a{color:var(--ink);text-decoration:none;border:1.5px solid var(--line);border-radius:999px;padding:5px 14px;font-size:15px}
+.toc a:hover{border-color:var(--ink)}
+.toc a b{margin-right:6px}
+section{scroll-margin-top:16px}
+section.first{margin-top:36px}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:34px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.card h3{margin:0 0 6px;font-size:19px;font-weight:700}
+.card p{margin:0 0 8px;font-size:16px}
+.card .muted{color:var(--muted);font-size:15px}
+.parttitle{font-size:22px;font-weight:700;margin:0 0 4px}
+#dpE{height:300px}
+h1{font-size:clamp(32px,4.8vw,58px);line-height:1.02;font-weight:750;letter-spacing:-.025em;margin:0;max-width:18ch}
+.lede{margin:12px 0 0;color:var(--muted);max-width:62ch}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:999px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{font:inherit;font-weight:600;font-size:16px;border:0;background:none;color:var(--ink);padding:7px 20px;border-radius:999px;cursor:pointer}
+.seg.small button{font-size:14px;padding:5px 14px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+button:focus-visible,input:focus-visible{outline:2.5px solid var(--e);outline-offset:2px}
+
+.top{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,1fr);gap:28px}
+.stage{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+#stage{display:block;width:100%;aspect-ratio:5/4;cursor:grab;touch-action:none}
+#stage:active{cursor:grabbing}
+.hint{position:absolute;left:14px;bottom:10px;font-size:13px;color:var(--muted);background:color-mix(in srgb,var(--panel) 80%,transparent);padding:2px 6px;border-radius:6px;max-width:calc(100% - 28px)}
+.legend{position:absolute;right:14px;bottom:10px;font-size:13px;color:var(--muted);text-align:right;line-height:1.55;
+  background:color-mix(in srgb,var(--panel) 82%,transparent);padding:6px 8px;border-radius:8px;pointer-events:none}
+.legend b{font-weight:600;color:var(--ink)}
+.sw{display:inline-block;width:18px;height:0;border-top:2.5px solid;vertical-align:middle;margin-right:6px}
+
+aside{display:flex;flex-direction:column;gap:16px}
+.ctl label{display:block;font-weight:600;font-size:15px}
+.ctl label output{float:right;margin-left:12px}
+.ctl label output{font-variant-numeric:tabular-nums;font-weight:400;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--ink);margin:6px 0 0}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{font:inherit;font-size:15px;font-weight:600;padding:7px 16px;border-radius:8px;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer}
+.btn.ghost{background:none;color:var(--ink);font-size:14px;padding:5px 12px}
+.check{display:flex;gap:8px;align-items:center;font-size:15px;cursor:pointer}
+.check input{accent-color:var(--ink);width:17px;height:17px}
+.readout{border-top:1.5px solid var(--ink);padding-top:14px;display:grid;gap:14px}
+.readout h3{margin:0 0 4px;font-size:15px;font-weight:600}
+.readout h3 span{font-weight:400;color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;font-variant-numeric:tabular-nums;font-size:15px;margin:0}
+.kv dt{color:var(--muted)} .kv dd{margin:0;text-align:right}
+.cV{color:var(--v)} .cE{color:var(--e)}
+.agree{font-size:14px;color:var(--muted);margin:6px 0 0}
+
+section{margin-top:52px}
+h2{font-size:clamp(24px,2.6vw,32px);font-weight:750;letter-spacing:-.015em;margin:0 0 6px;line-height:1.1}
+.sub{color:var(--muted);margin:0 0 18px;max-width:68ch}
+.plots{display:grid;grid-template-columns:minmax(0,2fr) minmax(240px,1fr);gap:28px;align-items:start}
+.plotbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 10px 4px}
+.plotbox canvas{display:block;width:100%;height:230px}
+.plotbox .cap{font-size:14px;font-weight:600;padding:2px 6px 0}
+.plotbox+.plotbox{margin-top:12px}
+.note p{margin:0 0 14px;max-width:46ch}
+.note .big{font-size:20px;line-height:1.35}
+
+.cP{color:var(--pos)} .cN{color:var(--neg)}
+.traj{margin-top:20px;border-top:1.5px solid var(--ink);padding-top:14px}
+.traj h3{margin:0 0 8px;font-size:17px;font-weight:700}
+.traj .row{margin-top:8px}
+.group{margin-bottom:22px}
+.group-title{font-size:18px;font-weight:700;margin:0 0 8px}
+.coords{display:grid;gap:6px;margin-bottom:10px}
+.coord{display:grid;grid-template-columns:18px 1fr 74px;align-items:center;gap:10px}
+.coord span{font-style:italic;font-size:17px;font-weight:600}
+.coord input[type=range]{margin:0}
+.coord input[type=number]{font:inherit;font-size:14px;width:100%;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);font-variant-numeric:tabular-nums}
+.coord input:disabled{opacity:.4}
+.simbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.status{margin-top:10px;min-height:3em;font-size:15px}
+.status strong{font-weight:700}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.plain{background:none;color:var(--ink)}
+.mapgrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,1fr);gap:28px;align-items:start}
+.mapbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative}
+#map{display:block;width:100%;aspect-ratio:1/1;cursor:crosshair;touch-action:none}
+#hover{position:absolute;left:12px;top:10px;font-size:13px;font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:4px 9px;pointer-events:none;opacity:0;transition:opacity .15s}
+
+.routes{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.route{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.route h3{margin:0 0 2px;font-size:20px;font-weight:750}
+.route .tag{color:var(--muted);font-size:15px;margin:0 0 12px}
+.route ol{margin:0;padding-left:22px}
+.route li{margin:0 0 12px;padding-left:4px}
+.route li::marker{font-weight:600}
+.route p{margin:0}
+math{font-size:1.12em}
+math[display="block"]{margin:8px 0 2px;overflow-x:auto;overflow-y:hidden;padding:4px 0}
+.box{border:3px solid var(--hl);border-radius:6px;padding:4px 12px;margin-top:6px;display:block;overflow-x:auto}
+.limits{margin-top:20px;padding:16px 22px;border-left:4px solid var(--v);background:var(--panel);border-radius:0 12px 12px 0;max-width:80ch}
+.limits p{margin:0 0 8px}
+.offaxis{margin-top:20px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.offaxis h3{margin:0 0 6px;font-size:20px;font-weight:750}
+.offaxis p{margin:0 0 8px;max-width:72ch}
+.units{font-size:14px;color:var(--muted);margin-top:28px;max-width:80ch}
+footer{margin-top:40px;padding-top:16px;border-top:1.5px solid var(--ink);font-size:14px;color:var(--muted);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer b{color:var(--ink);font-weight:600}
+[hidden]{display:none!important}
+
+@media (max-width:900px){
+  .top,.plots,.mapgrid,.routes{grid-template-columns:1fr}
+  .parthead{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr 1fr}
+}
+@media (max-width:600px){.cards{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .legend{position:static;text-align:left;background:none;border-top:1px solid var(--line);border-radius:0;padding:8px 14px 10px}
+  .hint{top:10px;bottom:auto}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="intro">
+  <p class="lang"><a href="index_ko.html" hreflang="ko" lang="ko">한국어</a></p>
+  <h1>Electric charge, field and potential, step by step</h1>
+  <p class="byline">Based on Prof. Sang Hoon Lee’s general physics lecture notes. Created by Claude Opus 5.5.</p>
+  <p class="lede">From Coulomb’s law between two point charges, to the field and potential of a dipole, to continuous charge on a ring and a disk. Every picture is live: drag the charges and move the sliders.</p>
+  <nav class="toc" aria-label="Contents">
+    <a href="#basics"><b>1</b> Charges, forces and fields</a>
+    <a href="#dipole"><b>2</b> The electric dipole</a>
+    <a href="#ringdisk"><b>3</b> Ring and disk</a>
+    <a href="#tests"><b>4</b> Test charges in 3D</a>
+    <a href="#derivations"><b>5</b> Derivations</a>
+  </nav>
+</header>
+
+<section id="basics" class="first">
+  <h2>1. Charges, forces and fields</h2>
+  <p class="sub">The basics from the lecture notes, then a playground where you can try them.</p>
+  <div class="cards">
+    <div class="card">
+      <h3>Electric charge</h3>
+      <p>Charge comes in whole multiples of the elementary charge, so it is quantized:</p>
+      <math display="block"><mi>q</mi><mo>=</mo><mi>n</mi><mi>e</mi><mo>,</mo><mspace width="0.6em"/><mi>e</mi><mo>=</mo><mn>1.602</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>19</mn></mrow></msup><mtext> C</mtext></math>
+      <p>An electron carries −e, a proton +e, and a neutron 0. Charge is conserved: it can move, but it is never created or destroyed. The rate at which it flows past a point is the current, i = dq/dt.</p>
+      <p class="muted">Conductors let charge move freely, insulators do not, and semiconductors sit in between.</p>
+    </div>
+    <div class="card">
+      <h3>Coulomb’s law</h3>
+      <div class="box"><math display="block"><mover><mi>F</mi><mo>→</mo></mover><mo>=</mo><mi>k</mi><mfrac><mrow><msub><mi>q</mi><mn>1</mn></msub><msub><mi>q</mi><mn>2</mn></msub></mrow><msup><mi>r</mi><mn>2</mn></msup></mfrac><mover><mi>r</mi><mo>^</mo></mover></math></div>
+      <math display="block"><mi>k</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>4</mn><mi>π</mi><msub><mi>ε</mi><mn>0</mn></msub></mrow></mfrac><mo>=</mo><mn>8.99</mn><mo>×</mo><msup><mn>10</mn><mn>9</mn></msup><mtext> N·m²/C²</mtext></math>
+      <p>F is the force on q₂, and r̂ points from q₁ toward q₂. Like signs push apart (along r̂); opposite signs pull together (along −r̂). The force on q₁ is −F, by Newton’s third law. With several charges, the forces add as vectors: F<sub>net</sub> = F₁₂ + F₁₃ + ⋯.</p>
+      <p class="muted">ε₀ = 8.85 × 10⁻¹² C²/(N·m²) is the permittivity of free space.</p>
+    </div>
+    <div class="card">
+      <h3>Gravity, for comparison</h3>
+      <math display="block"><msub><mover><mi>F</mi><mo>→</mo></mover><mi>g</mi></msub><mo>=</mo><mo>−</mo><mi>G</mi><mfrac><mrow><msub><mi>m</mi><mn>1</mn></msub><msub><mi>m</mi><mn>2</mn></msub></mrow><msup><mi>r</mi><mn>2</mn></msup></mfrac><mover><mi>r</mi><mo>^</mo></mover></math>
+      <p>Here r̂ points away from the other mass, so the minus sign makes gravity pull the two together. The 1/r² comes from geometry: whatever spreads out from a point is shared over a sphere of area 4πr².</p>
+      <p>Near Earth’s surface r ≈ R<sub>E</sub>, so F<sub>g</sub> = G m<sub>E</sub>m/r² ≈ m(G m<sub>E</sub>/R<sub>E</sub>²) = mg, with g ≈ 9.8 m/s².</p>
+    </div>
+    <div class="card">
+      <h3>Shell theorems</h3>
+      <p>A uniformly charged spherical shell acts on a charge outside it as if all its charge sat at the center. On a charge inside the shell, the net force is zero.</p>
+      <p class="muted">These follow neatly from Gauss’s law, which comes later in the course.</p>
+    </div>
+    <div class="card">
+      <h3>Electric field</h3>
+      <div class="box"><math display="block"><mover><mi>E</mi><mo>→</mo></mover><mo>=</mo><mfrac><mover><mi>F</mi><mo>→</mo></mover><msub><mi>q</mi><mn>0</mn></msub></mfrac><mo>,</mo><mspace width="0.6em"/><mover><mi>E</mi><mo>→</mo></mover><mo>=</mo><mfrac><mn>1</mn><mrow><mn>4</mn><mi>π</mi><msub><mi>ε</mi><mn>0</mn></msub></mrow></mfrac><mfrac><mi>q</mi><msup><mi>r</mi><mn>2</mn></msup></mfrac><mover><mi>r</mi><mo>^</mo></mover></math></div>
+      <p>How do two charges “know” about each other? Each one fills the space around it with a field, and the other charge feels that field. E is the force per unit test charge q₀, in N/C.</p>
+      <p>Faraday’s field lines have E as their tangent; they start on positive charges and end on negative ones. Fields add as vectors: E = E₁ + E₂ + ⋯.</p>
+    </div>
+    <div class="card">
+      <h3>Electric potential</h3>
+      <div class="box"><math display="block"><mi>V</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>4</mn><mi>π</mi><msub><mi>ε</mi><mn>0</mn></msub></mrow></mfrac><mfrac><mi>q</mi><mi>r</mi></mfrac><mo>,</mo><mspace width="0.6em"/><mi>V</mi><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>V</mi><mi>i</mi></msub></math></div>
+      <p>Measured from V(∞) = 0. Potentials add as plain numbers, which is much easier than adding vectors, and the field follows as E = −∇V.</p>
+      <p>The potential energy of a pair is U = k q₁q₂/r: positive for like signs, negative for opposite signs. For more charges, add it up pair by pair.</p>
+    </div>
+  </div>
+
+  <h3 class="parttitle">Coulomb’s law next to gravity</h3>
+  <p class="sub">Both forces are proportional to a product and fall off as 1/r². But charge has two signs, so the electric force can attract or repel, while mass is never negative, so gravity only attracts. And between particles, the electric force is overwhelmingly stronger.</p>
+  <div class="mapgrid" style="margin-bottom:40px">
+    <div class="mapbox"><canvas id="cg" style="display:block;width:100%;aspect-ratio:16/10" aria-label="Two particles with their electric and gravitational forces, and a log-scale comparison of the two magnitudes"></canvas>
+</div>
+    <div>
+      <div class="group">
+        <p class="group-title">Pair</p>
+        <div class="seg small" id="cgPair" role="group" aria-label="Pair of objects"></div>
+      </div>
+      <div class="ctl"><label for="cgR"><span>Distance <i>r</i></span> <output id="cgRo"></output></label><input id="cgR" type="range" min="-2" max="2" step="0.01" value="0"></div>
+      <div class="simbox" style="margin-top:12px"><dl class="kv" id="cgRead"></dl></div>
+      <p class="agree" id="cgNote"></p>
+    </div>
+  </div>
+
+  <h3 class="parttitle">Point-charge playground</h3>
+  <p class="sub">Drag the charges and the test charge q₀. Arrows on each charge are the Coulomb forces from every other charge (thin, colored by the charge exerting them) and their vector sum (thick). The blue arrow at q₀ is E there. Turn on the potential to see equipotential curves cross the field lines at right angles.</p>
+  <div class="mapgrid">
+    <div class="mapbox"><canvas id="pg" style="display:block;width:100%;aspect-ratio:16/11;touch-action:none;cursor:default" aria-label="Playground of draggable point charges with forces, field lines and potential"></canvas>
+      <div class="hint">Charges in μC, distances in cm. Arrow lengths grow as √|F| so small and large forces both stay visible.</div></div>
+    <div>
+      <div class="group">
+        <p class="group-title">Start from</p>
+        <div class="row" id="pgPresets" style="margin-top:0"></div>
+        <div class="row" style="margin-top:8px"><button class="btn plain" id="pgAddP">Add <span class="cP">+1 μC</span></button><button class="btn plain" id="pgAddN">Add <span class="cN">−1 μC</span></button><button class="btn plain" id="pgDel">Remove selected</button></div>
+      </div>
+      <div class="group">
+        <p class="group-title">Show</p>
+        <div class="row" style="margin-top:0">
+          <label class="check"><input type="checkbox" id="pgLines" checked> Field lines</label>
+          <label class="check"><input type="checkbox" id="pgForces" checked> Forces</label>
+          <label class="check"><input type="checkbox" id="pgPot"> Potential V</label>
+        </div>
+      </div>
+      <div class="group">
+        <p class="group-title">Selected charge</p>
+        <div class="ctl"><label for="pgQ"><span>Charge <i>q</i></span> <output id="pgQo"></output></label><input id="pgQ" type="range" min="-5" max="5" step="0.5"></div>
+        <div class="simbox" style="margin-top:10px"><dl class="kv" id="pgForce"></dl></div>
+        <p class="agree" id="pgThird"></p>
+      </div>
+      <div class="group">
+        <p class="group-title">At the test charge q₀ = 1 nC</p>
+        <div class="simbox"><dl class="kv" id="pgProbe"></dl></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="dipole">
+  <h2>2. The electric dipole</h2>
+  <p class="sub">Two equal and opposite charges ±q a distance d apart. Molecules such as water behave like this: the oxygen side is slightly negative and the hydrogen side slightly positive.</p>
+  <div class="plots">
+    <div>
+      <div class="plotbox"><div class="cap cE">Field on the axis, |E| in units of k q/d² (log–log)</div><canvas id="dpE" aria-label="Log-log plot of the dipole's on-axis field, exact and approximate, compared with a single charge"></canvas></div>
+      <div class="ctl" style="margin-top:14px"><label for="dpZ"><span>Distance along the axis, <i>z</i>/<i>d</i></span> <output id="dpZo"></output></label><input id="dpZ" type="range" min="0" max="1" step="0.001" value="0.35"></div>
+      <div class="simbox" style="margin-top:10px"><dl class="kv" id="dpRead"></dl></div>
+      <div class="row" style="margin-top:10px"><button class="btn plain" id="dpShow">Show a dipole in the playground</button></div>
+    </div>
+    <div class="note">
+      <p>On the axis, at distance z from the center, the two fields point opposite ways:</p>
+      <math display="block"><msub><mi>E</mi><mtext>net</mtext></msub><mo>=</mo><mfrac><mi>q</mi><mrow><mn>4</mn><mi>π</mi><msub><mi>ε</mi><mn>0</mn></msub></mrow></mfrac><mrow><mo>(</mo><mfrac><mn>1</mn><msup><mrow><mo>(</mo><mi>z</mi><mo>−</mo><mfrac><mi>d</mi><mn>2</mn></mfrac><mo>)</mo></mrow><mn>2</mn></msup></mfrac><mo>−</mo><mfrac><mn>1</mn><msup><mrow><mo>(</mo><mi>z</mi><mo>+</mo><mfrac><mi>d</mi><mn>2</mn></mfrac><mo>)</mo></mrow><mn>2</mn></msup></mfrac><mo>)</mo></mrow></math><math display="block"><mo>=</mo><mfrac><mi>q</mi><mrow><mn>2</mn><mi>π</mi><msub><mi>ε</mi><mn>0</mn></msub></mrow></mfrac><mfrac><mi>d</mi><msup><mi>z</mi><mn>3</mn></msup></mfrac><mfrac><mn>1</mn><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><msup><mrow><mo>(</mo><mfrac><mi>d</mi><mrow><mn>2</mn><mi>z</mi></mrow></mfrac><mo>)</mo></mrow><mn>2</mn></msup><mo>)</mo></mrow><mn>2</mn></msup></mfrac></math>
+      <p>For z ≫ d the last factor is close to 1. With the dipole moment p = qd, pointing from − to +:</p>
+      <div class="box"><math display="block"><mover><mi>E</mi><mo>→</mo></mover><mo>≈</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>π</mi><msub><mi>ε</mi><mn>0</mn></msub></mrow></mfrac><mfrac><mover><mi>p</mi><mo>→</mo></mover><msup><mi>z</mi><mn>3</mn></msup></mfrac><mo>,</mo><mspace width="0.8em"/><mi>V</mi><mo>≈</mo><mfrac><mn>1</mn><mrow><mn>4</mn><mi>π</mi><msub><mi>ε</mi><mn>0</mn></msub></mrow></mfrac><mfrac><mrow><mi>p</mi><mspace width="0.15em"/><mi>cos</mi><mspace width="0.1em"/><mi>θ</mi></mrow><msup><mi>r</mi><mn>2</mn></msup></mfrac></math></div>
+      <p>Seen from far away, the + and − almost cancel, so the field falls as 1/z³, faster than the 1/z² of a single charge. On the log–log plot that is a slope of −3 instead of −2. The potential falls as 1/r², one power slower, because E = −∂V/∂z takes one more power of z.</p>
+    </div>
+  </div>
+</section>
+
+
+<div class="parthead" id="ringdisk">
+  <div>
+    <h2 class="big">3. Continuous charge: ring and disk, two routes to one field</h2>
+    <p class="lede">Add up the vectors d<i>E</i>, or add up the scalars d<i>V</i> and take the gradient. On the axis, symmetry makes the vector route easy. Move P off the axis and the sideways parts stop cancelling, while the potential is still a plain scalar sum.</p>
+  </div>
+  <div class="seg" role="group" aria-label="Charge distribution">
+    <button id="bRing" aria-pressed="true">Ring</button>
+    <button id="bDisk" aria-pressed="false">Disk</button>
+  </div>
+</div>
+
+<div class="top">
+  <div class="stage">
+    <canvas id="stage" aria-label="3D view of the charge distribution, point P, and field vectors"></canvas>
+    <div class="hint">Drag to rotate the view</div>
+    <div class="legend" id="legend"></div>
+  </div>
+  <aside>
+    <div class="ctl"><label for="sR">Radius <i>R</i> <output id="oR"></output></label><input id="sR" type="range" min="0.3" max="3" step="0.05" value="1"></div>
+    <div class="ctl"><label for="sZ">Height of P, <i>z</i> <output id="oZ"></output></label><input id="sZ" type="range" min="-4" max="4" step="0.01" value="1.5"></div>
+    <div class="ctl"><label for="sRho">Distance of P from the axis, <i>ρ</i> <output id="oRho"></output></label><input id="sRho" type="range" min="0" max="4" step="0.01" value="0">
+      <div class="row" style="margin-top:8px"><button class="btn ghost" id="toAxis">Move P onto the axis</button><button class="btn ghost" id="toPlane">Move P into the plane</button><button class="btn ghost" id="toCenter">Center</button></div>
+    </div>
+    <div class="ctl">
+      <label for="sP"><span id="pLabel">Sum the pieces around the ring</span> <output id="oP"></output></label>
+      <input id="sP" type="range" min="0" max="1" step="0.001" value="1">
+      <div class="row" style="margin-top:8px"><button class="btn" id="play">Play the sum</button><label class="check"><input type="checkbox" id="cLim"> Show limit cases</label></div>
+    </div>
+    <div class="readout">
+      <div>
+        <h3>Summed so far</h3>
+        <dl class="kv">
+          <dt>V (partial)</dt><dd class="cV" id="rVp"></dd>
+          <dt>E<sub>z</sub> (partial)</dt><dd class="cE" id="rEzp"></dd>
+          <dt>E<sub>x</sub>, toward P’s side (partial)</dt><dd class="cE" id="rExp"></dd>
+          <dt>E<sub>y</sub>, out of the slice (partial)</dt><dd id="rEyp"></dd>
+        </dl>
+      </div>
+      <div>
+        <h3>Exact at P <span id="cfNote"></span></h3>
+        <dl class="kv">
+          <dt>V</dt><dd class="cV" id="rV"></dd>
+          <dt>E<sub>z</sub> from summing dE</dt><dd class="cE" id="rEz"></dd>
+          <dt>−∂V/∂z, numerically</dt><dd class="cE" id="rDz"></dd>
+          <dt>E<sub>ρ</sub> from summing dE</dt><dd class="cE" id="rEr"></dd>
+          <dt>−∂V/∂ρ, numerically</dt><dd class="cE" id="rDr"></dd>
+        </dl>
+        <p class="agree" id="agree"></p>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<section>
+  <h2>Slope one way, area the other</h2>
+  <p class="sub">Both curves follow the same straight line through P. The dot is P.</p>
+  <div class="row" style="margin:-4px 0 14px">
+    <div class="seg small" role="group" aria-label="Line to plot along">
+      <button id="bLz" aria-pressed="true">Vertical line through P (vary z)</button>
+      <button id="bLx" aria-pressed="false">Horizontal line through P (vary x)</button>
+    </div>
+  </div>
+  <div class="plots">
+    <div>
+      <div class="plotbox"><div class="cap cV" id="capV"></div><canvas id="pV" aria-label="Plot of V along a line through P with tangent line at P"></canvas></div>
+      <div class="plotbox"><div class="cap cE" id="capE"></div><canvas id="pE" aria-label="Plot of the field component along the same line, with the area from P to infinity shaded"></canvas></div>
+    </div>
+    <div class="note">
+      <p class="big">The tangent to <span class="cV">V</span> at P has slope −<span class="cE">E<sub>s</sub></span>, the field component along the line. That is <i>E</i> = −∇<i>V</i>, one direction at a time.</p>
+      <p class="big">Going back, <span class="cV">V</span> at P is the shaded area under <span class="cE">E<sub>s</sub></span> from P out to infinity: <i>V</i> = −∫<sub>∞</sub><sup>P</sup> <i>E</i>·d<i>s</i>, with <i>V</i>(∞) = 0.</p>
+      <p id="plotNote" style="color:var(--muted)"></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Off the axis: equipotentials and field lines cross at right angles</h2>
+  <p class="sub">A slice through the axis (the <i>x</i>–<i>z</i> plane). The shading and magenta curves are <i>V</i>; the blue arrows are <i>E</i> = −∇<i>V</i>, always pointing straight downhill across the equipotentials. Click to move P there, or switch to launching test charges and watch where the field takes them.</p>
+  <div class="mapgrid">
+    <div class="mapbox"><canvas id="map" aria-label="Cross-section map of potential with equipotential contours and electric field arrows"></canvas><div id="hover"></div></div>
+    <div>
+      <div style="display:grid;gap:10px">
+        <label class="check"><input type="checkbox" id="cHeat" checked> Shade by potential</label>
+        <label class="check"><input type="checkbox" id="cEq" checked> Equipotential curves</label>
+        <label class="check"><input type="checkbox" id="cArr" checked> Field arrows</label>
+      </div>
+      <div class="traj">
+        <h3>Clicking the map</h3>
+        <div class="seg small" role="group" aria-label="What a click on the map does">
+          <button id="mP" aria-pressed="true">Moves P</button>
+          <button id="mL" aria-pressed="false">Sets the launch point</button>
+        </div>
+        <p id="modeHelp" style="font-size:15px;margin:8px 0 0;max-width:46ch;color:var(--muted)"></p>
+      </div>
+      <p style="margin-top:18px;max-width:44ch">Look at the ring’s center: the equipotentials cross in an X. That is a saddle point. The field there is zero, yet V rises toward the wire in the plane and falls along the axis.</p>
+      <p style="color:var(--muted);font-size:15px;max-width:44ch">Computed from exact ring solutions with complete elliptic integrals (via the arithmetic–geometric mean). The disk is built from many such rings.</p>
+    </div>
+  </div>
+</section>
+
+<section id="tests">
+  <h2>4. Test charges in 3D</h2>
+  <p class="sub">A test charge of mass m = 1 and charge ±1 starts at rest and moves under F = QE, using the exact field of the ring or disk. Nudge it off the center to test the stability there, or release it anywhere.</p>
+  <div class="mapgrid">
+    <div class="mapbox"><canvas id="traj3d" style="display:block;width:100%;aspect-ratio:1/1;cursor:grab;touch-action:none" aria-label="3D view of the test-charge trajectory around the charge distribution"></canvas>
+      <div class="hint">Drag to rotate. The faint line is the shadow on the z = 0 plane.</div></div>
+    <div>
+      <div class="group">
+        <p class="group-title">Launch point</p>
+        <div class="coords" id="coords">
+          <label class="coord"><span>x</span><input type="range" min="-4" max="4" step="0.01" data-i="0" aria-label="Launch x"><input type="number" min="-4" max="4" step="0.05" data-i="0" aria-label="Launch x value"></label>
+          <label class="coord"><span>y</span><input type="range" min="-4" max="4" step="0.01" data-i="1" aria-label="Launch y"><input type="number" min="-4" max="4" step="0.05" data-i="1" aria-label="Launch y value"></label>
+          <label class="coord"><span>z</span><input type="range" min="-4" max="4" step="0.01" data-i="2" aria-label="Launch z"><input type="number" min="-4" max="4" step="0.05" data-i="2" aria-label="Launch z value"></label>
+        </div>
+        <p class="agree" style="margin:0">You can also set it by clicking the map above with “Sets the launch point” selected.</p>
+      </div>
+      <div class="group">
+        <p class="group-title">Release a test charge</p>
+        <div class="seg small" id="signSeg" role="group" aria-label="Test charge sign">
+          <button data-v="1" aria-pressed="true">Same sign as q (<span class="cP">+Q</span>)</button>
+          <button data-v="-1" aria-pressed="false">Opposite sign (<span class="cN">−Q</span>)</button>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <div class="seg small" id="consSeg" role="group" aria-label="Constraint">
+            <button data-v="free" aria-pressed="true">Free in 3D</button>
+            <button data-v="plane" aria-pressed="false">Confined to plane</button>
+            <button data-v="axis" aria-pressed="false">Confined to axis</button>
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn primary" id="nudge">Nudge from center</button>
+          <button class="btn plain" id="release">Release at launch point</button>
+          <button class="btn plain" id="trajClear">Clear</button>
+        </div>
+        <div class="status" id="status" aria-live="polite"></div>
+        <div class="simbox" id="simReadout" hidden>
+          <dl class="kv">
+            <dt>Time t</dt><dd id="sT"></dd>
+            <dt>Position (x, y, z)</dt><dd id="sPos"></dd>
+            <dt>Distance from center</dt><dd id="sDist"></dd>
+            <dt>Speed</dt><dd id="sSpeed"></dd>
+            <dt>Potential V</dt><dd class="cV" id="sV"></dd>
+            <dt>Field |E|</dt><dd class="cE" id="sE"></dd>
+          </dl>
+        </div>
+      </div>
+      <p style="max-width:46ch" id="trajNote"></p>
+    </div>
+  </div>
+</section>
+
+<section id="derivations">
+  <h2 id="routesTitle">The two derivations</h2>
+  <p class="sub">Following the lecture notes. Boxed lines are the results.</p>
+  <div class="routes">
+    <div class="route"><h3>Route A: add vectors</h3><p class="tag">Coulomb’s law for each piece, then symmetry</p><ol id="routeA"></ol></div>
+    <div class="route"><h3>Route B: add scalars</h3><p class="tag">Potential of each piece, then differentiate</p><ol id="routeB"></ol></div>
+  </div>
+  <div class="limits" id="limits"></div>
+  <div class="offaxis" id="offaxis"></div>
+  <p class="units">Numbers in the demo use k<sub>e</sub> = 1/(4πε₀) = 1. For the ring, q = 1. For the disk, σ/(2ε₀) = 1, so the total charge q = σπR² grows with R. Disk formulas are written for z ≥ 0 as in the notes; below the disk V is even in z and E<sub>z</sub> is odd. Off the axis, the disk is summed numerically from 400 exact rings.</p>
+</section>
+
+<footer>
+  <span>Created by <b>Claude Opus 5.5</b>, based on <b>Prof. Sang Hoon Lee</b>’s general physics lecture notes on Coulomb’s law, the electric field and the electric potential, and on the note “The Electric Potential and Field of a Uniformly Charged Ring and Spherical Shell.”</span>
+  <a href="index_ko.html" hreflang="ko" lang="ko">한국어 버전</a>
+</footer>
+</div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const st={obj:'ring',R:1,z:1.5,rho:0,p:1,lim:false,az:-0.55,el:0.34,heat:true,eq:true,arr:true,hover:null,line:'z'};
+
+/* ---------- physics (k_e = 1; ring q = 1; disk sigma/(2 eps0) = 1) ---------- */
+const PH={
+  ring:{Vmax:R=>1/R,Emax:R=>2/(3*Math.sqrt(3)*R*R),Q:()=>1},
+  disk:{Vmax:R=>R,Emax:()=>1,Q:R=>R*R/2}
+};
+function ellKE(m){ // complete elliptic integrals K, E of parameter m = k^2
+  if(m>1-1e-14)m=1-1e-14;if(m<0)m=0;
+  let a=1,b=Math.sqrt(1-m),sum=0.5*m,p=0.5;
+  for(let i=0;i<40;i++){const c=(a-b)/2,an=(a+b)/2;b=Math.sqrt(a*b);a=an;p*=2;sum+=p*c*c;if(c<1e-16)break;}
+  const K=Math.PI/(2*a);return[K,K*(1-sum)];
+}
+function ringF(rho,z,a,q){ // Appendix A of the ring note
+  const d2=(a+rho)*(a+rho)+z*z,d=Math.sqrt(d2),m=4*a*rho/d2,[K,E]=ellKE(m),g2=(a-rho)*(a-rho)+z*z;
+  const V=2*q/Math.PI*K/d,Ez=2*q/Math.PI*z*E/(g2*d);
+  const Er=rho<1e-9?0:q/(Math.PI*rho*d)*(K+(rho*rho-a*a-z*z)/g2*E);
+  return{V,Ez,Er};
+}
+function field(rho,z,N=400){
+  const R=st.R;
+  if(st.obj==='ring')return ringF(rho,z,R,1);
+  if(rho<1e-9){const h=Math.hypot(z,R);return{V:h-Math.abs(z),Ez:Math.sign(z)*(1-Math.abs(z)/h),Er:0};}
+  const da=R/N;let V=0,Ez=0,Er=0;
+  for(let i=0;i<N;i++){const a=(i+.5)*da,f=ringF(rho,z,a,a*da);V+=f.V;Ez+=f.Ez;Er+=f.Er;}
+  return{V,Ez,Er};
+}
+function onWire(){return st.obj==='ring'&&Math.hypot(st.rho-st.R,st.z)<0.03;}
+function onDisk(){return st.obj==='disk'&&Math.abs(st.z)<1e-3&&st.rho<st.R;}
+function partial(){
+  const {R,z,rho,p}=st;
+  if(st.obj==='ring'){
+    const N=720,n=Math.round(p*N);let V=0,Ex=0,Ey=0,Ez=0;
+    for(let i=0;i<n;i++){const f=(i+.5)/N*2*Math.PI,dx=rho-R*Math.cos(f),dy=-R*Math.sin(f),r=Math.hypot(dx,dy,z),r3=r*r*r,dq=1/N;V+=dq/r;Ex+=dq*dx/r3;Ey+=dq*dy/r3;Ez+=dq*z/r3;}
+    return{V,Ex,Ey,Ez};
+  }
+  const a=p*R;
+  if(rho<1e-9)return{V:Math.hypot(z,a)-Math.abs(z),Ez:Math.sign(z)*(1-Math.abs(z)/Math.hypot(z,a)),Ex:0,Ey:0};
+  const N=Math.max(1,Math.round(p*300)),da=a/N;let V=0,Ez=0,Ex=0;
+  if(a>0)for(let i=0;i<N;i++){const r=(i+.5)*da,f=ringF(rho,z,r,r*da);V+=f.V;Ez+=f.Ez;Ex+=f.Er;}
+  return{V,Ex,Ey:0,Ez};
+}
+function agm(a,b){for(let i=0;i<24;i++){const an=(a+b)/2;b=Math.sqrt(a*b);a=an;if(Math.abs(a-b)<1e-11*a)break;}return a;}
+function ringV(rho,z,a,q){const d2=(rho+a)*(rho+a)+z*z;let m=4*a*rho/d2;if(m>1-1e-10)m=1-1e-10;return q/(agm(1,Math.sqrt(1-m))*Math.sqrt(d2));}
+function Voff(rho,z){
+  const R=st.R;if(st.obj==='ring')return ringV(rho,z,R,1);
+  const N=64,da=R/N;let s=0;for(let i=0;i<N;i++){const a=(i+.5)*da;s+=ringV(rho,z,a,a*da);}return s;
+}
+
+/* ---------- helpers ---------- */
+function fit(c){const r=c.getBoundingClientRect(),d=window.devicePixelRatio||1;const w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(c.width!==w||c.height!==h){c.width=w;c.height=h;}const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return{ctx:x,w:r.width,h:r.height,d};}
+function col(){const s=getComputedStyle(document.documentElement);const g=n=>s.getPropertyValue(n).trim();return{ink:g('--ink'),muted:g('--muted'),grid:g('--grid'),line:g('--line'),e:g('--e'),v:g('--v'),hl:g('--hl'),panel:g('--panel'),paper:g('--paper')};}
+function isDark(){const t=document.documentElement.dataset.theme;if(t==='dark')return true;if(t==='light')return false;return matchMedia('(prefers-color-scheme: dark)').matches;}
+function arrow(ctx,x0,y0,x1,y1,color,w=2,dash=null,head=9){
+  const dx=x1-x0,dy=y1-y0,L=Math.hypot(dx,dy);if(!(L>=1.5))return;
+  ctx.save();ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=w;ctx.lineCap='round';
+  if(dash)ctx.setLineDash(dash);
+  const ux=dx/L,uy=dy/L,hh=Math.min(head,L*.45);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1-ux*hh*.7,y1-uy*hh*.7);ctx.stroke();ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-ux*hh-uy*hh*.45,y1-uy*hh+ux*hh*.45);ctx.lineTo(x1-ux*hh+uy*hh*.45,y1-uy*hh-ux*hh*.45);ctx.closePath();ctx.fill();
+  ctx.restore();
+}
+const fmt=v=>{if(!isFinite(v))return '—';const a=Math.abs(v);if(a<5e-5)return '0.0000';return (v<0?'−':'')+a.toFixed(a>=100?1:4);};
+const FONT='"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif';
+const clampLen=(v,max)=>{const L=Math.hypot(...v);return L>max?v.map(c=>c*max/L):v;};
+
+/* ---------- 3D stage ---------- */
+const stage=$('#stage');
+function drawStage(){
+  const {ctx,w,h}=fit(stage),c=col();ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle=c.grid;ctx.lineWidth=1;
+  for(let x=0;x<w;x+=24){ctx.beginPath();ctx.moveTo(x+.5,0);ctx.lineTo(x+.5,h);ctx.stroke();}
+  for(let y=0;y<h;y+=24){ctx.beginPath();ctx.moveTo(0,y+.5);ctx.lineTo(w,y+.5);ctx.stroke();}
+  const {R,z,rho}=st,ph=PH[st.obj],onAx=rho<0.02;
+  const s=Math.min(h/11.2,w/9.4),cx=w/2-s*0.4,cy=h/2-s*0.3;
+  const ca=Math.cos(st.az),sa=Math.sin(st.az),ce=Math.cos(st.el),se=Math.sin(st.el);
+  const P3=(x,y,zz)=>{const X=x*ca+y*sa,D=-x*sa+y*ca;return[cx+s*X,cy-s*(zz*ce+D*se),D];};
+  const line=(a,b,color,wd=1.5,dash=null)=>{ctx.save();ctx.strokeStyle=color;ctx.lineWidth=wd;if(dash)ctx.setLineDash(dash);ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();ctx.restore();};
+  const text=(t,p,color,dx=0,dy=0,size=15,it=true)=>{ctx.fillStyle=color;ctx.font=`${it?'italic ':''}600 ${size}px ${FONT}`;ctx.fillText(t,p[0]+dx,p[1]+dy);};
+
+  line(P3(0,0,-5.2),P3(0,0,0),c.muted,1.2);
+  line(P3(-4.3,0,0),P3(4.3,0,0),c.line,1,[3,4]);line(P3(0,-3.3,0),P3(0,3.3,0),c.line,1,[3,4]);
+  text('x',P3(4.3,0,0),c.muted,4,4,13);
+
+  const k=1.35/ph.Emax(R),part=partial();
+  if(st.obj==='ring'){
+    const Phi=2*Math.PI*st.p,N=180;
+    for(let pass=0;pass<2;pass++){
+      for(let i=0;i<N;i++){
+        const f0=i/N*2*Math.PI,f1=(i+1)/N*2*Math.PI;
+        const a=P3(R*Math.cos(f0),R*Math.sin(f0),0),b=P3(R*Math.cos(f1),R*Math.sin(f1),0);
+        const back=(a[2]+b[2])/2>0;if((pass===0)!==back)continue;
+        const done=f1<=Phi+1e-9;
+        ctx.save();ctx.globalAlpha=back?.55:1;line(a,b,done?c.v:c.muted,done?4:2);ctx.restore();
+      }
+      if(pass===0)line(P3(0,0,0),P3(0,0,5.4),c.muted,1.2);
+    }
+  }else{
+    const N=120,a=Math.max(st.p*R,1e-4);
+    const poly=(rad,fill,stroke,wd)=>{ctx.beginPath();for(let i=0;i<=N;i++){const f=i/N*2*Math.PI,q=P3(rad*Math.cos(f),rad*Math.sin(f),0);i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);}ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=wd;ctx.stroke();}};
+    ctx.save();ctx.globalAlpha=.35;poly(R,c.line,null);ctx.restore();
+    poly(R,null,c.muted,1.5);
+    ctx.save();ctx.globalAlpha=.32;poly(a,c.v,null);ctx.restore();
+    poly(a,null,c.v,3.5);
+    line(P3(0,0,0),P3(0,0,5.4),c.muted,1.2);
+  }
+  text('z',P3(0,0,5.4),c.muted,8,4);
+  const o=P3(0,0,0),rimPt=P3(-R*sa,R*ca,0);line(o,rimPt,c.ink,1.2,[2,3]);
+  text('R',[(o[0]+rimPt[0])/2,(o[1]+rimPt[1])/2],c.ink,-14,-4);
+
+  const P=P3(rho,0,z),Pw=[rho,0,z];
+  if(!onAx){const A=P3(0,0,z),F=P3(rho,0,0);line(A,P,c.ink,1.1,[3,3]);line(F,P,c.line,1,[2,3]);text('ρ',[(A[0]+P[0])/2,(A[1]+P[1])/2],c.ink,-3,-7,14);}
+
+  // pieces: current and opposite
+  let el,mir;
+  if(st.obj==='ring'){const f=2*Math.PI*st.p;el=[R*Math.cos(f),R*Math.sin(f),0];}
+  else{const a=Math.max(st.p*R,1e-4);el=[a*sa,-a*ca,0];}
+  mir=[-el[0],-el[1],0];
+  const E2=P3(...el),M2=P3(...mir);
+  line(E2,P,c.ink,1.2);line(M2,P,c.muted,1,[4,4]);
+  text('r',[(E2[0]+P[0])/2,(E2[1]+P[1])/2],c.ink,6,-4);
+  if(onAx&&Math.abs(z)>0.25){
+    const a1=Math.atan2(o[1]-P[1],o[0]-P[0]),a2=Math.atan2(E2[1]-P[1],E2[0]-P[0]);let d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;
+    ctx.save();ctx.strokeStyle=c.ink;ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(P[0],P[1],24,a1,a1+d,d<0);ctx.stroke();ctx.restore();
+    const am=a1+d/2;text('θ',[P[0]+Math.cos(am)*34-4,P[1]+Math.sin(am)*34+5],c.ink,0,0,14);
+  }
+  ctx.fillStyle=c.v;ctx.beginPath();ctx.arc(E2[0],E2[1],5.5,0,7);ctx.fill();
+  ctx.strokeStyle=c.v;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(M2[0],M2[1],5,0,7);ctx.stroke();
+  text('dq',E2,c.v,8,16,14);
+
+  const pieceVec=e=>{const d=[Pw[0]-e[0],Pw[1]-e[1],Pw[2]-e[2]],r=Math.hypot(...d);
+    const Mg=st.obj==='ring'?Math.min(k/(r*r),2.6):Math.min(Math.max(1.3/(r*r),0.3),2.4);return d.map(x=>x/r*Mg);};
+  const drawPiece=(v,solid)=>{
+    const tip=P3(Pw[0]+v[0],v[1],z+v[2]),hz=P3(Pw[0]+v[0],v[1],z),ax=P3(Pw[0],0,z+v[2]);
+    arrow(ctx,P[0],P[1],hz[0],hz[1],c.muted,solid?1.6:1.3,solid?[4,3]:[2,4],8);
+    if(solid){arrow(ctx,P[0],P[1],ax[0],ax[1],c.e,1.4,[5,3],8);line(tip,ax,c.line,1,[2,3]);line(tip,hz,c.line,1,[2,3]);}
+    ctx.save();ctx.globalAlpha=solid?1:.6;arrow(ctx,P[0],P[1],tip[0],tip[1],c.e,solid?2:1.6,solid?null:[5,4],10);ctx.restore();
+  };
+  if(!onWire()){drawPiece(pieceVec(mir),false);drawPiece(pieceVec(el),true);}
+
+  const tv=clampLen([part.Ex*k,part.Ey*k,part.Ez*k],3.2);
+  if(tv.every(isFinite)){const T=P3(Pw[0]+tv[0],tv[1],z+tv[2]);arrow(ctx,P[0],P[1],T[0],T[1],c.ink,4,null,14);}
+  ctx.fillStyle=c.ink;ctx.beginPath();ctx.arc(P[0],P[1],5,0,7);ctx.fill();
+  text('P',P,c.ink,-22,-8,17,false);
+
+  const opp=onAx?'sideways parts cancel against the opposite piece':'sideways parts no longer cancel off the axis';
+  $('#legend').innerHTML=(st.obj==='ring'
+    ?`<span class="sw" style="border-color:${c.e}"></span>dE from one piece (×N, so on the axis its axial part equals E)<br>`
+    :`<span class="sw" style="border-color:${c.e}"></span>dE from a piece of the current ring (relative size)<br>`)
+    +`<span class="sw" style="border-color:${c.e};border-top-style:dashed"></span>dE from the opposite piece<br>`
+    +`<span class="sw" style="border-color:${c.muted};border-top-style:dashed"></span>${opp}<br>`
+    +`<span class="sw" style="border-color:${c.ink};border-top-width:4px"></span><b>E summed so far</b>`;
+}
+let drag=null;
+stage.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};stage.setPointerCapture(e.pointerId);});
+stage.addEventListener('pointermove',e=>{if(!drag)return;st.az+=(e.clientX-drag.x)*0.01;st.el=Math.min(1.1,Math.max(0.05,st.el+(e.clientY-drag.y)*0.006));drag={x:e.clientX,y:e.clientY};drawStage();});
+const endDrag=()=>{drag=null;};stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',endDrag);
+
+/* ---------- plots along a line through P ---------- */
+function niceStep(range,n){const raw=range/n,p=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/p;return (f<1.5?1:f<3?2:f<7?5:10)*p;}
+let samples=null;
+function sampleLine(){
+  const N=500,S=[],Vs=[],Es=[],Nr=160;
+  for(let i=0;i<=N;i++){
+    const s=-4+8*i/N;let f;
+    if(st.line==='z'){f=field(st.rho,s,Nr);Vs.push(f.V);Es.push(f.Ez);}
+    else{f=field(Math.abs(s),st.z,Nr);Vs.push(f.V);Es.push(Math.sign(s)*f.Er);}
+    S.push(s);
+  }
+  samples={S,Vs,Es};
+}
+function crossesWire(){
+  if(st.obj!=='ring')return false;const R=st.R,t=0.04;
+  if(st.line==='z')return Math.abs(st.rho-R)<t&&st.z<t;
+  return Math.abs(st.z)<t&&st.rho<R+t;
+}
+function drawPlot(cv,kind){
+  const {ctx,w,h}=fit(cv),c=col();ctx.clearRect(0,0,w,h);
+  const ph=PH[st.obj],R=st.R,m={l:48,r:14,t:10,b:26},s1=-4,s2=4;
+  const s0=st.line==='z'?st.z:st.rho,{S,Vs,Es}=samples,arr=kind==='V'?Vs:Es;
+  let mx=0;for(const v of arr)if(isFinite(v))mx=Math.max(mx,Math.abs(v));
+  let y0,y1;
+  if(kind==='V'){y0=0;y1=Math.max(ph.Vmax(R)*0.2,Math.min(mx*1.2,2.2*ph.Vmax(R)));}
+  else{const e=Math.max(ph.Emax(R)*0.25,Math.min(mx*1.25,3.5*ph.Emax(R)));y0=-e;y1=e;}
+  const X=s=>m.l+(s-s1)/(s2-s1)*(w-m.l-m.r),Y=v=>m.t+(y1-v)/(y1-y0)*(h-m.t-m.b),H=h-m.t-m.b;
+  ctx.font=`13px ${FONT}`;ctx.fillStyle=c.muted;ctx.strokeStyle=c.grid;ctx.lineWidth=1;
+  const sy=niceStep(y1-y0,4);
+  for(let v=Math.ceil(y0/sy)*sy;v<=y1+1e-9;v+=sy){ctx.beginPath();ctx.moveTo(m.l,Y(v));ctx.lineTo(w-m.r,Y(v));ctx.stroke();ctx.textAlign='right';ctx.fillText(Math.abs(v)<1e-9?'0':fmt(v).replace(/0+$/,'').replace(/\.$/,''),m.l-6,Y(v)+4);}
+  ctx.textAlign='center';for(let s=-4;s<=4;s+=1){ctx.beginPath();ctx.moveTo(X(s),m.t);ctx.lineTo(X(s),h-m.b);ctx.stroke();ctx.fillText(s===0?'0':(s<0?'−':'')+Math.abs(s),X(s),h-8);}
+  ctx.strokeStyle=c.muted;ctx.beginPath();ctx.moveTo(m.l,Y(0));ctx.lineTo(w-m.r,Y(0));ctx.stroke();
+  ctx.beginPath();ctx.moveTo(X(0),m.t);ctx.lineTo(X(0),h-m.b);ctx.stroke();
+  ctx.textAlign='right';ctx.font=`italic 13px ${FONT}`;ctx.fillText(st.line==='z'?'z':'x',w-m.r-2,Y(0)-6);
+  // where the charge sits on this line
+  ctx.save();ctx.strokeStyle=c.ink;ctx.globalAlpha=.35;ctx.setLineDash([6,3]);
+  if(st.line==='x'&&Math.abs(st.z)<0.04){for(const sx of [-R,R]){ctx.beginPath();ctx.moveTo(X(sx),m.t);ctx.lineTo(X(sx),h-m.b);ctx.stroke();}}
+  ctx.restore();
+  ctx.save();ctx.beginPath();ctx.rect(m.l,m.t,w-m.l-m.r,h-m.t-m.b);ctx.clip();
+  const cross=crossesWire();
+  if(kind==='E'&&!cross){
+    ctx.fillStyle=c.v;
+    for(const sgn of [1,-1]){
+      ctx.save();ctx.globalAlpha=sgn>0?.22:.12;ctx.beginPath();ctx.moveTo(X(s0),Y(0));
+      for(let i=0;i<S.length;i++){if(S[i]<s0)continue;let v=Es[i];if(!isFinite(v))v=0;v=sgn>0?Math.max(v,0):Math.min(v,0);ctx.lineTo(X(S[i]),Y(Math.max(y0*2,Math.min(y1*2,v))));}
+      ctx.lineTo(X(s2),Y(0));ctx.closePath();ctx.fill();ctx.restore();
+    }
+  }
+  const path=(ys,color,wd,dash)=>{ctx.save();ctx.strokeStyle=color;ctx.lineWidth=wd;if(dash)ctx.setLineDash(dash);ctx.beginPath();let pen=false,py=0;
+    for(let i=0;i<S.length;i++){const v=ys[i];if(!isFinite(v)){pen=false;continue;}const yy=Math.max(m.t-H,Math.min(h+H,Y(v)));
+      if(pen&&Math.abs(yy-py)>H*0.7)pen=false;pen?ctx.lineTo(X(S[i]),yy):ctx.moveTo(X(S[i]),yy);pen=true;py=yy;}
+    ctx.stroke();ctx.restore();};
+  if(st.lim){
+    const Q=ph.Q(R),lim=S.map(s=>{const d=st.line==='z'?Math.hypot(st.rho,s):Math.hypot(s,st.z);return kind==='V'?Q/d:Q*s/(d*d*d);});
+    path(lim,c.muted,1.5,[5,4]);
+    if(st.obj==='disk'&&kind==='E'&&st.line==='z'){ctx.save();ctx.strokeStyle=c.ink;ctx.globalAlpha=.6;ctx.lineWidth=1.5;ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(X(s1),Y(-1));ctx.lineTo(X(0),Y(-1));ctx.moveTo(X(0),Y(1));ctx.lineTo(X(s2),Y(1));ctx.stroke();ctx.restore();}
+  }
+  path(arr,kind==='V'?c.v:c.e,2.6);
+  const fP=atP;
+  if(kind==='V'&&isFinite(fP.Es)){const slope=-fP.Es,v0=fP.V,dz=1.3;ctx.save();ctx.strokeStyle=c.e;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(X(s0-dz),Y(v0-slope*dz));ctx.lineTo(X(s0+dz),Y(v0+slope*dz));ctx.stroke();ctx.restore();}
+  ctx.restore();
+  const v0=kind==='V'?fP.V:fP.Es;
+  if(isFinite(v0)&&v0>=y0&&v0<=y1){ctx.fillStyle=c.ink;ctx.beginPath();ctx.arc(X(s0),Y(v0),5,0,7);ctx.fill();}
+  ctx.save();ctx.strokeStyle=c.ink;ctx.globalAlpha=.4;ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(X(s0),m.t);ctx.lineTo(X(s0),h-m.b);ctx.stroke();ctx.restore();
+  ctx.font=`600 13px ${FONT}`;const right=s0>1.5;ctx.textAlign=right?'right':'left';const lx=X(s0)+(right?-10:10);
+  if(kind==='V'){ctx.fillStyle=c.e;ctx.fillText(`slope = −E_s = ${fmt(-fP.Es)}`,lx,m.t+16);}
+  else{ctx.fillStyle=c.v;ctx.fillText(cross?'path to ∞ crosses the wire: V diverges there':`area from P to ∞ = V = ${fmt(fP.V)}`,lx,m.t+16);}
+}
+let atP={V:0,Es:0};
+
+/* ---------- cross-section map ---------- */
+const map=$('#map'),G=160,L=4;let grid=null,Exg=null,Ezg=null,base=null,baseKey='';
+function compute(){
+  const n=G+1;grid=new Float32Array(n*n);Exg=new Float32Array(n*n);Ezg=new Float32Array(n*n);
+  const h=G/2,dx=2*L/G;
+  for(let i=h;i<=G;i++)for(let j=h;j<=G;j++){
+    const v=Voff((i-h)*dx,(j-h)*dx);
+    grid[i*n+j]=v;grid[(G-i)*n+j]=v;grid[i*n+(G-j)]=v;grid[(G-i)*n+(G-j)]=v;
+  }
+  for(let i=0;i<=G;i++)for(let j=0;j<=G;j++){
+    const ip=Math.min(G,i+1),im=Math.max(0,i-1),jp=Math.min(G,j+1),jm=Math.max(0,j-1);
+    Exg[i*n+j]=-(grid[ip*n+j]-grid[im*n+j])/((ip-im)*dx);
+    Ezg[i*n+j]=-(grid[i*n+jp]-grid[i*n+jm])/((jp-jm)*dx);
+  }
+  baseKey='';
+}
+function vRange(){const R=st.R;const lo=Math.max(1e-6,grid[G*(G+1)+G]*0.95);const hi=st.obj==='ring'?2.2/R:R*0.999;return[lo,Math.max(hi,lo*1.5)];}
+function buildBase(w,h,d){
+  const c=col(),key=[st.obj,st.R,st.heat,st.eq,st.arr,w,h,isDark()].join('|');if(key===baseKey&&base)return;baseKey=key;
+  base=document.createElement('canvas');base.width=Math.round(w*d);base.height=Math.round(h*d);const ctx=base.getContext('2d');ctx.setTransform(d,0,0,d,0,0);
+  const n=G+1,[lo,hi]=vRange(),lr=Math.log(hi/lo);
+  const tOf=v=>Math.min(1,Math.max(0,Math.log(Math.max(v,1e-12)/lo)/lr));
+  const pal=isDark()?[[21,28,40],[96,32,86],[246,152,210]]:[[255,255,255],[247,196,226],[160,32,118]];
+  const cmap=t=>{const a=t<.5?pal[0]:pal[1],b=t<.5?pal[1]:pal[2],u=t<.5?t*2:(t-.5)*2;return[a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u,a[2]+(b[2]-a[2])*u];};
+  ctx.fillStyle=c.panel;ctx.fillRect(0,0,w,h);
+  if(st.heat){
+    const off=document.createElement('canvas');off.width=n;off.height=n;const oc=off.getContext('2d'),img=oc.createImageData(n,n);
+    for(let i=0;i<n;i++)for(let j=0;j<n;j++){const k=((G-j)*n+i)*4,cc=cmap(Math.pow(tOf(grid[i*n+j]),1.1));img.data[k]=cc[0];img.data[k+1]=cc[1];img.data[k+2]=cc[2];img.data[k+3]=255;}
+    oc.putImageData(img,0,0);ctx.imageSmoothingEnabled=true;ctx.drawImage(off,0,0,w,h);
+  }
+  const SX=i=>i/G*w,SY=j=>h-j/G*h;
+  if(st.eq){
+    ctx.strokeStyle=c.v;ctx.lineWidth=1.3;ctx.globalAlpha=.9;
+    const NL=15,levels=[];for(let l=1;l<=NL;l++)levels.push(lo*Math.pow(hi/lo,l/(NL+1)));
+    if(st.obj==='ring')levels.push(1/st.R); // the level through the saddle at the center
+    for(const lev of levels){
+      ctx.beginPath();
+      for(let i=0;i<G;i++)for(let j=0;j<G;j++){
+        const a=grid[i*n+j],b=grid[(i+1)*n+j],cc=grid[(i+1)*n+j+1],dd=grid[i*n+j+1],pts=[];
+        const edge=(v1,v2,x1,y1,x2,y2)=>{if((v1<lev)!==(v2<lev)){const t=(lev-v1)/(v2-v1);pts.push([x1+(x2-x1)*t,y1+(y2-y1)*t]);}};
+        edge(a,b,i,j,i+1,j);edge(b,cc,i+1,j,i+1,j+1);edge(cc,dd,i+1,j+1,i,j+1);edge(dd,a,i,j+1,i,j);
+        for(let q=0;q+1<pts.length;q+=2){ctx.moveTo(SX(pts[q][0]),SY(pts[q][1]));ctx.lineTo(SX(pts[q+1][0]),SY(pts[q+1][1]));}
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+  }
+  if(st.arr){
+    const step=10,sp=step/G*w,Eref=PH[st.obj].Emax(st.R);
+    for(let i=step/2;i<=G;i+=step)for(let j=step/2;j<=G;j+=step){
+      const ex=Exg[i*n+j],ez=Ezg[i*n+j],mg=Math.hypot(ex,ez);if(!(mg>1e-9))continue;
+      const f=Math.min(1,Math.pow(mg/Eref,0.4)),len=sp*0.78*Math.max(.3,f);
+      const x=SX(i),y=SY(j),ux=ex/mg,uy=-ez/mg;
+      ctx.save();ctx.globalAlpha=.35+.65*f;arrow(ctx,x-ux*len/2,y-uy*len/2,x+ux*len/2,y+uy*len/2,c.e,1.6,null,6);ctx.restore();
+    }
+  }
+  const X=x=>(x+L)/(2*L)*w,Y=z=>h-(z+L)/(2*L)*h;
+  ctx.save();ctx.strokeStyle=c.ink;ctx.globalAlpha=.5;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(X(0),0);ctx.lineTo(X(0),h);ctx.stroke();ctx.restore();
+  ctx.fillStyle=c.ink;ctx.strokeStyle=c.ink;
+  if(st.obj==='ring'){for(const sx of [-1,1]){ctx.beginPath();ctx.arc(X(sx*st.R),Y(0),5,0,7);ctx.fill();}}
+  else{ctx.lineWidth=5;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(X(-st.R),Y(0));ctx.lineTo(X(st.R),Y(0));ctx.stroke();}
+  ctx.font=`italic 13px ${FONT}`;ctx.fillStyle=c.muted;ctx.fillText('x',w-14,Y(0)-6);ctx.fillText('z',X(0)+6,14);
+}
+function drawMap(){
+  const {ctx,w,h,d}=fit(map),c=col(),cs=getComputedStyle(document.documentElement),c2={pos:cs.getPropertyValue('--pos').trim(),neg:cs.getPropertyValue('--neg').trim()};buildBase(w,h,d);
+  ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(base,0,0);ctx.setTransform(d,0,0,d,0,0);
+  const X=x=>(x+L)/(2*L)*w,Y=z=>h-(z+L)/(2*L)*h;
+  // the line used by the plots
+  ctx.save();ctx.strokeStyle=c.ink;ctx.globalAlpha=.55;ctx.lineWidth=1.2;ctx.setLineDash([2,4]);ctx.beginPath();
+  if(st.line==='z'){ctx.moveTo(X(st.rho),0);ctx.lineTo(X(st.rho),h);}else{ctx.moveTo(0,Y(st.z));ctx.lineTo(w,Y(st.z));}
+  ctx.stroke();ctx.restore();
+  ctx.fillStyle=c.ink;ctx.beginPath();ctx.arc(X(st.rho),Y(st.z),6,0,7);ctx.fill();
+  ctx.strokeStyle=c.panel;ctx.lineWidth=2;ctx.stroke();
+  ctx.font=`600 15px ${FONT}`;ctx.fillStyle=c.ink;ctx.fillText('P',X(st.rho)+10,Y(st.z)-8);
+  {const lp=constrain(tcs.launch),color=tcs.sign>0?c2.pos:c2.neg;ctx.save();ctx.strokeStyle=color;ctx.lineWidth=1.6;ctx.setLineDash([3,2]);ctx.beginPath();ctx.arc(X(lp[0]),Y(lp[2]),7,0,7);ctx.stroke();ctx.restore();}
+  if(sim){const color=sim.sign>0?c2.pos:c2.neg;
+    ctx.save();ctx.strokeStyle=color;ctx.lineWidth=2.2;ctx.lineJoin='round';ctx.beginPath();sim.trail.forEach((q,i)=>i?ctx.lineTo(X(q[0]),Y(q[2])):ctx.moveTo(X(q[0]),Y(q[2])));ctx.stroke();
+    ctx.fillStyle=color;ctx.beginPath();ctx.arc(X(sim.s[0]),Y(sim.s[2]),6,0,7);ctx.fill();ctx.restore();}
+  const hv=$('#hover');
+  if(st.hover){
+    const {x,z}=st.hover,n=G+1,fi=(x+L)/(2*L)*G,fj=(z+L)/(2*L)*G,i=Math.min(G-1,Math.max(0,Math.floor(fi))),j=Math.min(G-1,Math.max(0,Math.floor(fj))),tx=fi-i,tz=fj-j;
+    const bl=a=>a[i*n+j]*(1-tx)*(1-tz)+a[(i+1)*n+j]*tx*(1-tz)+a[i*n+j+1]*(1-tx)*tz+a[(i+1)*n+j+1]*tx*tz;
+    const V=bl(grid),ex=bl(Exg),ez=bl(Ezg),mg=Math.hypot(ex,ez),px=X(x),pz=Y(z);
+    if(mg>1e-9){arrow(ctx,px,pz,px+ex/mg*34,pz-ez/mg*34,c.ink,2.6,null,9);
+      ctx.save();ctx.strokeStyle=c.ink;ctx.lineWidth=1.2;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(px+ez/mg*22,pz+ex/mg*22);ctx.lineTo(px-ez/mg*22,pz-ex/mg*22);ctx.stroke();ctx.restore();}
+    hv.innerHTML=`x = ${fmt(x)}, z = ${fmt(z)}<br><span class="cV">V = ${fmt(V)}</span> &nbsp; <span class="cE">|E| = ${fmt(mg)}</span><br><span style="color:var(--muted)">arrow ⟂ dashed equipotential</span>`;hv.style.opacity=1;
+  }else hv.style.opacity=0;
+}
+/* ---------- test-charge simulation (one charge, full 3D) ---------- */
+let sim=null,simAnim=0,clickMode='P';const T3={az:-0.7,el:0.42};
+const tcs={launch:[1.6,0.8,1.2],sign:1,cons:'free'};
+const IDLE='The test charge starts at rest. Its charge-to-mass ratio is ±1 in these units.';
+function fieldSim(x,y,z){const r=Math.hypot(x,y);let f;
+  if(st.obj==='ring')f=ringF(r,z,st.R,1);
+  else{const N=48,da=st.R/N;let Ez=0,Er=0,V=0;for(let i=0;i<N;i++){const a=(i+.5)*da,g=ringF(r,z,a,a*da);Ez+=g.Ez;Er+=g.Er;V+=g.V;}f={Ez,Er,V};}
+  return r<1e-12?[0,0,f.Ez,f.V]:[f.Er*x/r,f.Er*y/r,f.Ez,f.V];}
+function dToCharge(x,y,z){const r=Math.hypot(x,y),R=st.R;if(st.obj==='ring')return Math.hypot(r-R,z);return r<R?Math.abs(z):Math.hypot(r-R,z);}
+function constrain(p){p=p.slice();if(tcs.cons==='plane')p[2]=0;if(tcs.cons==='axis'){p[0]=0;p[1]=0;}return p;}
+function deriv(s){const e=fieldSim(s[0],s[1],s[2]),Q=sim.sign;let a=[Q*e[0],Q*e[1],Q*e[2]];
+  if(sim.cons==='plane')a[2]=0;if(sim.cons==='axis'){a[0]=0;a[1]=0;}return[s[3],s[4],s[5],a[0],a[1],a[2]];}
+function startSim(p0){
+  const p=constrain(p0),tc=tcs.cons==='axis'?2:(Math.abs(p[0])>=Math.abs(p[1])?0:1);
+  sim={s:[...p,0,0,0],t:0,trail:[p.slice()],sign:tcs.sign,cons:tcs.cons,p0:p.slice(),tc,last:Math.sign(p[tc]),cross:[],done:false};
+  $('#status').textContent='Running…';
+  if(!simAnim)simAnim=requestAnimationFrame(loopSim);
+}
+const TMAX=()=>60*Math.pow(st.R,1.5);
+function stepSim(Tchunk){
+  const R=st.R;let tt=0;
+  while(tt<Tchunk&&!sim.done){
+    const s=sim.s,a=deriv(s),d=Math.max(dToCharge(s[0],s[1],s[2]),1e-4),v=Math.hypot(s[3],s[4],s[5]),A=Math.hypot(a[3],a[4],a[5]);
+    let h=Math.min(0.02*Math.pow(R,1.5),0.04*d/(v+1e-9),Math.sqrt(0.04*d/(A+1e-12)),Tchunk-tt);h=Math.max(h,1e-5);
+    const k1=a,s2=s.map((q,i)=>q+h/2*k1[i]),k2=deriv(s2),s3=s.map((q,i)=>q+h/2*k2[i]),k3=deriv(s3),s4=s.map((q,i)=>q+h*k3[i]),k4=deriv(s4);
+    const n=s.map((q,i)=>q+h/6*(k1[i]+2*k2[i]+2*k3[i]+k4[i]));
+    if(st.obj==='disk'&&sim.cons!=='plane'&&s[2]!==0&&Math.sign(n[2])!==Math.sign(s[2])){const f=s[2]/(s[2]-n[2]),xc=s[0]+f*(n[0]-s[0]),yc=s[1]+f*(n[1]-s[1]);
+      if(Math.hypot(xc,yc)<R){sim.s=[xc,yc,0,0,0,0];sim.t+=h*f;sim.trail.push([xc,yc,0]);finish('disk');return;}}
+    sim.s=n;tt+=h;sim.t+=h;
+    const sg=Math.sign(n[sim.tc]);if(sg!==0&&sg!==sim.last){sim.cross.push(sim.t);sim.last=sg;}
+    const lp=sim.trail[sim.trail.length-1];if(Math.hypot(n[0]-lp[0],n[1]-lp[1],n[2]-lp[2])>0.015)sim.trail.push([n[0],n[1],n[2]]);
+    if(sim.trail.length>8000)sim.trail.splice(0,sim.trail.length-8000);
+    if(st.obj==='ring'&&dToCharge(n[0],n[1],n[2])<0.03){finish('ring');return;}
+    if(Math.max(Math.abs(n[0]),Math.abs(n[1]),Math.abs(n[2]))>L+0.6){finish('escape');return;}
+    if(sim.t>=TMAX()){finish('bounded');return;}
+  }
+}
+function describeDir(p){const rho=Math.hypot(p[0],p[1]),z=Math.abs(p[2]);if(z>2*rho)return'along the axis';if(rho>2*z)return'within the plane';return'off to the side';}
+function finish(how){
+  sim.done=true;sim.trail.push(sim.s.slice(0,3));const t=sim.t.toFixed(1);let msg='';
+  if(how==='escape')msg=`<strong>Escaped ${describeDir(sim.s)}</strong> at t = ${t}. The potential energy QV kept decreasing in that direction, so the starting point was not a stable equilibrium.`;
+  if(how==='ring')msg=`<strong>Pulled into the ring</strong> at t = ${t}. For an opposite-sign charge, any in-plane displacement grows toward the nearest part of the wire.`;
+  if(how==='disk')msg=`<strong>Landed on the disk</strong> at t = ${t}. An opposite-sign charge is attracted to the charged surface from either side.`;
+  if(how==='bounded'){
+    const moved=Math.hypot(...sim.s.slice(0,3).map((x,i)=>x-sim.p0[i]));
+    if(moved<1e-6&&sim.trail.length<3)msg=`<strong>No motion at all.</strong> The field at the launch point is zero (or has no component the constraint allows), so the charge stays put.`;
+    else{const c=sim.cross;let per='',pred='';
+      if(c.length>=3)per=` Measured period ≈ ${(2*(c[c.length-1]-c[0])/(c.length-1)).toFixed(2)}.`;
+      const T15=Math.pow(st.R,1.5);
+      if(st.obj==='ring'&&sim.cons==='plane'&&sim.sign>0)pred=` Small-oscillation prediction: T = 2π√2 R<sup>3/2</sup> ≈ ${(2*Math.PI*Math.SQRT2*T15).toFixed(2)}.`;
+      if(st.obj==='ring'&&sim.cons==='axis'&&sim.sign<0)pred=` Small-oscillation prediction: T = 2π R<sup>3/2</sup> ≈ ${(2*Math.PI*T15).toFixed(2)}.`;
+      msg=`<strong>Still bounded at t = ${TMAX().toFixed(0)}.</strong> ${sim.cons==='free'?'The charge stays trapped in this region.':'With the unstable direction removed, the charge oscillates about the center.'}${per}${pred}`;}
+  }
+  $('#status').innerHTML=msg;
+}
+function loopSim(){
+  if(!sim||sim.done){simAnim=0;updateSimReadout();drawMap();draw3D();return;}
+  stepSim(0.16*Math.pow(st.R,1.5));
+  updateSimReadout();drawMap();draw3D();
+  simAnim=requestAnimationFrame(loopSim);
+}
+function updateSimReadout(){
+  const box=$('#simReadout');if(!sim){box.hidden=true;return;}box.hidden=false;
+  const p=sim.s.slice(0,3),f=fieldSim(...p),m=Math.hypot(f[0],f[1],f[2]),f2=v=>fmt(v).replace(/(\.\d\d)\d\d$/,'$1');
+  $('#sT').textContent=sim.t.toFixed(2);$('#sPos').textContent=`(${p.map(f2).join(', ')})`;
+  $('#sDist').textContent=fmt(Math.hypot(...p));$('#sSpeed').textContent=fmt(Math.hypot(sim.s[3],sim.s[4],sim.s[5]));
+  $('#sV').textContent=f[3]>50?'very large':fmt(f[3]);$('#sE').textContent=m>50?'very large':fmt(m);
+}
+function nudge(){
+  const R=st.R,a=Math.random()*2*Math.PI,d=(tcs.cons==='free'?0.05:0.15)*R,pm=Math.random()<.5?-1:1;let p;
+  if(tcs.cons==='axis')p=[0,0,d*pm];
+  else if(tcs.cons==='plane')p=[d*Math.cos(a),d*Math.sin(a),0];
+  else p=[d*Math.cos(a)*.8,d*Math.sin(a)*.8,d*.6*pm];
+  startSim(p);
+}
+function clearTraj(){sim=null;cancelAnimationFrame(simAnim);simAnim=0;$('#status').textContent=IDLE;updateSimReadout();if(grid){drawMap();draw3D();}}
+const NOTES={
+ ring:`Try the four combinations. <span class="cP">+Q</span> confined to the plane oscillates through the center, and <span class="cN">−Q</span> confined to the axis does too, with ω<sub>z</sub>² = 2ω<sub>ρ</sub>². Free in 3D, a nudge always grows: <span class="cP">+Q</span> escapes along the axis and <span class="cN">−Q</span> is pulled into the ring. No sign of Q is trapped at the center, as Earnshaw’s theorem says.`,
+ disk:`The center of the disk sits on the charged surface itself. <span class="cP">+Q</span> is pushed away on either side, and <span class="cN">−Q</span> lands on the disk. “Confined to plane” is turned off for the disk, because that plane is the charged surface itself.`
+};
+function renderPresets(){$('#trajNote').innerHTML=NOTES[st.obj];
+  const pb=document.querySelector('#consSeg button[data-v="plane"]');pb.disabled=st.obj==='disk';pb.style.opacity=st.obj==='disk'?.4:1;pb.style.cursor=st.obj==='disk'?'not-allowed':'';
+  if(st.obj==='disk'&&tcs.cons==='plane'){tcs.cons='free';document.querySelectorAll('#consSeg button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v==='free'?'true':'false'));syncCoords();}}
+function syncCoords(){document.querySelectorAll('#coords input').forEach(inp=>{const i=+inp.dataset.i;inp.value=inp.type==='number'?tcs.launch[i].toFixed(2):tcs.launch[i];
+  inp.disabled=(tcs.cons==='plane'&&i===2)||(tcs.cons==='axis'&&i<2);});}
+document.querySelectorAll('#coords input').forEach(inp=>inp.addEventListener('input',()=>{const v=+inp.value;if(!isFinite(v))return;tcs.launch[+inp.dataset.i]=Math.max(-4,Math.min(4,v));syncCoords();drawMap();draw3D();}));
+function setupSeg(id,key){const seg=$(id);seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));tcs[key]=key==='sign'?+b.dataset.v:b.dataset.v;syncCoords();drawMap();draw3D();});}
+setupSeg('#signSeg','sign');setupSeg('#consSeg','cons');
+$('#nudge').onclick=nudge;$('#release').onclick=()=>startSim(tcs.launch);$('#trajClear').onclick=clearTraj;
+const MODEHELP={
+ P:'P is the observation point used everywhere above: the 3D view at the top, the “Summed so far” and “Exact at P” readouts, and the lines the plots follow. Clicking the map moves P to that spot.',
+ L:'Clicking the map sets the test charge’s launch point to that spot (with y = 0). Then use “Release at launch point” below.'};
+function setMode(m){clickMode=m;$('#mP').setAttribute('aria-pressed',m==='P');$('#mL').setAttribute('aria-pressed',m==='L');$('#modeHelp').textContent=MODEHELP[m];}
+$('#mP').onclick=()=>setMode('P');$('#mL').onclick=()=>setMode('L');
+$('#status').textContent=IDLE;syncCoords();
+
+/* 3D trajectory view */
+const tc=$('#traj3d');
+function draw3D(){
+  const {ctx,w,h}=fit(tc),c=col(),cs=getComputedStyle(document.documentElement),pos=cs.getPropertyValue('--pos').trim(),neg=cs.getPropertyValue('--neg').trim();
+  ctx.clearRect(0,0,w,h);
+  const s=Math.min(w,h)/11,cx=w/2,cy=h/2;
+  const ca=Math.cos(T3.az),sa=Math.sin(T3.az),ce=Math.cos(T3.el),se=Math.sin(T3.el);
+  const P3=(x,y,z)=>{const X=x*ca+y*sa,D=-x*sa+y*ca;return[cx+s*X,cy-s*(z*ce+D*se),D];};
+  const seg=(a,b,color,wd,alpha=1,dash=null)=>{ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=color;ctx.lineWidth=wd;if(dash)ctx.setLineDash(dash);ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();ctx.restore();};
+  for(let k=-4;k<=4;k++){seg(P3(k,-4,0),P3(k,4,0),c.grid,1);seg(P3(-4,k,0),P3(4,k,0),c.grid,1);}
+  seg(P3(-4.4,0,0),P3(4.4,0,0),c.line,1.2);seg(P3(0,-4.4,0),P3(0,4.4,0),c.line,1.2);
+  ctx.font=`italic 13px ${FONT}`;ctx.fillStyle=c.muted;
+  let q=P3(4.5,0,0);ctx.fillText('x',q[0],q[1]);q=P3(0,4.6,0);ctx.fillText('y',q[0],q[1]);
+  seg(P3(0,0,-4.4),P3(0,0,4.4),c.muted,1.2);q=P3(0,0,4.6);ctx.fillText('z',q[0]+4,q[1]);
+  const R=st.R,N=120;
+  ctx.beginPath();for(let i=0;i<=N;i++){const f=i/N*2*Math.PI,p=P3(R*Math.cos(f),R*Math.sin(f),0);i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);}ctx.closePath();
+  if(st.obj==='disk'){ctx.save();ctx.globalAlpha=.35;ctx.fillStyle=c.v;ctx.fill();ctx.restore();}
+  ctx.strokeStyle=c.v;ctx.lineWidth=st.obj==='ring'?3.5:2;ctx.stroke();
+  // constraint guide
+  if(tcs.cons==='axis')seg(P3(0,0,-4),P3(0,0,4),c.ink,2.5,.35);
+  if(tcs.cons==='plane'){ctx.save();ctx.globalAlpha=.08;ctx.fillStyle=c.ink;ctx.beginPath();[[-4,-4],[4,-4],[4,4],[-4,4]].forEach((p,i)=>{const a=P3(p[0],p[1],0);i?ctx.lineTo(a[0],a[1]):ctx.moveTo(a[0],a[1]);});ctx.fill();ctx.restore();}
+  // launch point marker
+  {const lp=constrain(tcs.launch),A=P3(...lp),F=P3(lp[0],lp[1],0),color=tcs.sign>0?pos:neg;
+   seg(A,F,color,1,.5,[2,3]);ctx.save();ctx.strokeStyle=color;ctx.lineWidth=1.6;ctx.setLineDash([3,2]);ctx.beginPath();ctx.arc(A[0],A[1],7,0,7);ctx.stroke();ctx.restore();}
+  if(sim){const color=sim.sign>0?pos:neg,pts=sim.trail;
+    ctx.save();ctx.globalAlpha=.28;ctx.strokeStyle=color;ctx.lineWidth=1.2;ctx.beginPath();pts.forEach((p,i)=>{const a=P3(p[0],p[1],0);i?ctx.lineTo(a[0],a[1]):ctx.moveTo(a[0],a[1]);});ctx.stroke();ctx.restore();
+    ctx.save();ctx.strokeStyle=color;ctx.lineCap='round';
+    for(let i=1;i<pts.length;i++){const a=P3(...pts[i-1]),b=P3(...pts[i]),D=(a[2]+b[2])/2;ctx.globalAlpha=Math.max(.35,Math.min(1,.75-D*.09));ctx.lineWidth=Math.max(1.2,2.6-D*.15);ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();}
+    ctx.restore();
+    const e=P3(sim.s[0],sim.s[1],sim.s[2]),sh=P3(sim.s[0],sim.s[1],0);seg(e,sh,color,1,.4,[2,3]);
+    ctx.fillStyle=color;ctx.beginPath();ctx.arc(e[0],e[1],7,0,7);ctx.fill();
+    ctx.fillStyle=c.panel;ctx.font=`700 12px ${FONT}`;ctx.textAlign='center';ctx.fillText(sim.sign>0?'+':'−',e[0],e[1]+4);ctx.textAlign='left';
+  }
+}
+let drag3=null;
+tc.addEventListener('pointerdown',e=>{drag3={x:e.clientX,y:e.clientY};tc.setPointerCapture(e.pointerId);});
+tc.addEventListener('pointermove',e=>{if(!drag3)return;T3.az+=(e.clientX-drag3.x)*0.01;T3.el=Math.min(1.45,Math.max(-0.2,T3.el+(e.clientY-drag3.y)*0.006));drag3={x:e.clientX,y:e.clientY};draw3D();});
+const end3=()=>{drag3=null;};tc.addEventListener('pointerup',end3);tc.addEventListener('pointercancel',end3);
+const mapXY=e=>{const r=map.getBoundingClientRect();return{x:((e.clientX-r.left)/r.width)*2*L-L,z:L-((e.clientY-r.top)/r.height)*2*L};};
+map.addEventListener('pointermove',e=>{st.hover=mapXY(e);drawMap();});
+map.addEventListener('pointerleave',()=>{st.hover=null;drawMap();});
+map.addEventListener('click',e=>{const q=mapXY(e);if(clickMode==='L'){tcs.launch=[Math.max(-4,Math.min(4,q.x)),0,Math.max(-4,Math.min(4,q.z))];syncCoords();drawMap();draw3D();return;}setP(Math.min(4,Math.abs(q.x)),Math.max(-4,Math.min(4,q.z)));});
+
+/* ---------- derivations (MathML) ---------- */
+const e0='<msub><mi>ε</mi><mn>0</mn></msub>',K=`<mfrac><mn>1</mn><mrow><mn>4</mn><mi>π</mi>${e0}</mrow></mfrac>`,ke='<msub><mi>k</mi><mi>e</mi></msub>';
+const fr=(a,b)=>`<mfrac><mrow>${a}</mrow><mrow>${b}</mrow></mfrac>`,sq=a=>`<msqrt>${a}</msqrt>`;
+const M=x=>`<math display="block">${x}</math>`,B=x=>`<div class="box">${M(x)}</div>`;
+const sqr=a=>`<msup><mi>${a}</mi><mn>2</mn></msup>`,rp='<msup><mi>r</mi><mo>′</mo></msup>',rp2='<msup><mi>r</mi><mrow><mo>′</mo><mn>2</mn></mrow></msup>';
+const zR=`${sqr('z')}<mo>+</mo>${sqr('R')}`,p32=x=>`<msup><mrow><mo>(</mo>${x}<mo>)</mo></mrow><mrow><mn>3</mn><mo>/</mo><mn>2</mn></mrow></msup>`;
+const Ez='<msub><mi>E</mi><mi>z</mi></msub>',Er='<msub><mi>E</mi><mi>ρ</mi></msub>',s2e=fr('<mi>σ</mi>',`<mn>2</mn>${e0}`),dVdz=fr('<mo>∂</mo><mi>V</mi>','<mo>∂</mo><mi>z</mi>');
+const dq='<mi>d</mi><mi>q</mi>',diskE=`${s2e}<mrow><mo>(</mo><mn>1</mn><mo>−</mo>${fr('<mi>z</mi>',sq(zR))}<mo>)</mo></mrow>`;
+const ROUTES={
+ ring:{A:[
+   [`Each piece dq is a distance r = √(z² + R²) from P:`,M(`<mi>d</mi><mi>E</mi><mo>=</mo>${K}${fr(dq,sqr('r'))}`)],
+   [`The piece on the opposite side cancels the sideways part, so only dE cos θ survives, with cos θ = z/r:`,M(`<mi>d</mi>${Ez}<mo>=</mo><mi>d</mi><mi>E</mi><mspace width="0.15em"/><mi>cos</mi><mi>θ</mi><mo>=</mo>${K}${fr(`<mi>z</mi><mspace width="0.1em"/>${dq}`,'<msup><mi>r</mi><mn>3</mn></msup>')}`)],
+   [`z and r are the same for every piece, so ∮dq = q:`,B(`${Ez}<mo>=</mo>${K}${fr('<mi>q</mi><mi>z</mi>',p32(zR))}`)]],
+  B:[
+   [`Potential is a scalar: no components and no cancellation to keep track of.`,M(`<mi>d</mi><mi>V</mi><mo>=</mo>${K}${fr(dq,'<mi>r</mi>')}`)],
+   [`Every piece has the same r, so the sum is immediate:`,B(`<mi>V</mi><mo>=</mo>${K}${fr('<mi>q</mi>',sq(zR))}`)],
+   [`Take the spatial derivative along the axis. Same answer as route A:`,M(`${Ez}<mo>=</mo><mo>−</mo>${dVdz}<mo>=</mo>${K}${fr('<mi>q</mi><mi>z</mi>',p32(zR))}`)]]},
+ disk:{A:[
+   [`Slice the disk into rings of radius r′ and width dr′:`,M(`${dq}<mo>=</mo><mi>σ</mi><mo>(</mo><mn>2</mn><mi>π</mi>${rp}<mo>)</mo><mspace width="0.1em"/><mi>d</mi>${rp}`)],
+   [`Each ring is the ring problem, already solved:`,M(`<mi>d</mi>${Ez}<mo>=</mo>${K}${fr(`<mi>z</mi><mspace width="0.1em"/>${dq}`,p32(`${sqr('z')}<mo>+</mo>${rp2}`))}`)],
+   [`Substitute u = r′² and integrate from 0 to R:`,B(`${Ez}<mo>=</mo>${diskE}`)]],
+  B:[
+   [`Each ring contributes a scalar dV:`,M(`<mi>d</mi><mi>V</mi><mo>=</mo>${K}${fr(`<mi>σ</mi><mo>(</mo><mn>2</mn><mi>π</mi>${rp}<mo>)</mo><mi>d</mi>${rp}`,sq(`${sqr('z')}<mo>+</mo>${rp2}`))}`)],
+   [`z does not change with r′, so treat it as a constant (u = r′² + z²):`,B(`<mi>V</mi><mo>=</mo>${s2e}<mrow><mo>(</mo>${sq(zR)}<mo>−</mo><mi>z</mi><mo>)</mo></mrow>`)],
+   [`Differentiate along the axis. Same answer as route A, with no vector bookkeeping:`,M(`${Ez}<mo>=</mo><mo>−</mo>${dVdz}<mo>=</mo>${diskE}`)]]}
+};
+const LIMITS={
+ ring:`<p><b>Far away (z ≫ R):</b> E<sub>z</sub> → q/(4πε₀z²) and V → q/(4πε₀z). The ring looks like a point charge q at a distance z.</p>
+<p><b>At the center:</b> every piece is a distance R away, so V(0) = k<sub>e</sub>q/R, exactly the potential at distance R from a point charge q. The fields are completely different, though: zero for the ring, k<sub>e</sub>q/R² for the point charge. A single value of V says nothing about E, because E = −∇V depends on how V changes around the point. Press “Center” and look at the slope in both plot directions.</p>`,
+ disk:`<p><b>Far away (z ≫ R):</b> the disk looks like a point charge q = σπR².</p><p><b>Very large disk (R → ∞):</b> E<sub>z</sub> → σ/(2ε₀), uniform and independent of z. That is the infinite charged plane.</p><p style="color:var(--muted)">Turn on “Show limit cases” and raise R to watch the field flatten toward the σ/(2ε₀) line. Notice the jump of σ/ε₀ in E<sub>z</sub> as you cross the disk, while V stays continuous with a kink.</p>`
+};
+const kk=`<msup><mi>k</mi><mn>2</mn></msup>`,Rp=`<msup><mrow><mo>(</mo><mi>R</mi><mo>+</mo><mi>ρ</mi><mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo>${sqr('z')}`,Rm=`<msup><mrow><mo>(</mo><mi>R</mi><mo>−</mo><mi>ρ</mi><mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo>${sqr('z')}`;
+const OFF={
+ ring:`<h3>Off the axis</h3><p>At a general point (ρ, z) the pieces are no longer all the same distance from P, so the integral becomes a complete elliptic integral K(k) or E(k), with</p>
+ ${M(`${kk}<mo>=</mo>${fr('<mn>4</mn><mi>R</mi><mi>ρ</mi>',Rp)}`)}
+ ${M(`<mi>V</mi><mo>=</mo>${fr(`<mn>2</mn>${ke}<mi>q</mi>`,'<mi>π</mi>')}${fr('<mi>K</mi><mo>(</mo><mi>k</mi><mo>)</mo>',sq(Rp))}<mspace width="1.2em"/>${Ez}<mo>=</mo>${fr(`<mn>2</mn>${ke}<mi>q</mi>`,'<mi>π</mi>')}${fr('<mi>z</mi><mspace width="0.1em"/><mi>E</mi><mo>(</mo><mi>k</mi><mo>)</mo>',`<mrow><mo>[</mo>${Rm}<mo>]</mo></mrow>${sq(Rp)}`)}`)}
+ ${M(`${Er}<mo>=</mo>${fr(`${ke}<mi>q</mi>`,`<mi>π</mi><mi>ρ</mi>${sq(Rp)}`)}<mrow><mo>[</mo><mi>K</mi><mo>(</mo><mi>k</mi><mo>)</mo><mo>+</mo>${fr(`${sqr('ρ')}<mo>−</mo>${sqr('R')}<mo>−</mo>${sqr('z')}`,Rm)}<mi>E</mi><mo>(</mo><mi>k</mi><mo>)</mo><mo>]</mo></mrow>`)}
+ <p>Setting ρ = 0 gives back the axis results. These are the formulas the demo evaluates off the axis, and E<sub>z</sub>, E<sub>ρ</sub> are checked live against −∂V/∂z, −∂V/∂ρ.</p>
+ <p>Near the center, the expansion is a saddle:</p>${B(`<mi>V</mi><mo>≈</mo>${fr(`${ke}<mi>q</mi>`,'<mi>R</mi>')}<mrow><mo>(</mo><mn>1</mn><mo>+</mo>${fr(`${sqr('x')}<mo>+</mo>${sqr('y')}<mo>−</mo><mn>2</mn>${sqr('z')}`,`<mn>4</mn>${sqr('R')}`)}<mo>)</mo></mrow>`)}
+ <p>V rises in the plane and falls along the axis, and the curvatures add to zero (∇²V = 0). A test charge at the center is in unstable equilibrium for either sign, as Earnshaw’s theorem requires.</p>`,
+ disk:`<h3>Off the axis</h3><p>There is no elementary closed form for the disk away from the axis. The demo does what Route B suggests: it adds the exact ring potentials (and fields) ring by ring, dq = σ(2πr′)dr′, using the elliptic-integral ring formulas. The vector route would need the sideways components of every piece, which no longer cancel.</p>`
+};
+function renderRoutes(){
+  const r=ROUTES[st.obj],li=a=>a.map(([t,m])=>`<li><p>${t}</p>${m}</li>`).join('');
+  $('#routeA').innerHTML=li(r.A);$('#routeB').innerHTML=li(r.B);$('#limits').innerHTML=LIMITS[st.obj];$('#offaxis').innerHTML=OFF[st.obj];
+  $('#routesTitle').textContent=st.obj==='ring'?'5. The two derivations for the ring':'5. The two derivations for the disk';
+}
+
+/* ---------- readouts & wiring ---------- */
+function readouts(){
+  const {R,z,rho}=st,pt=partial(),h=1e-4;
+  $('#oR').textContent=R.toFixed(2);$('#oZ').textContent=z.toFixed(2);$('#oRho').textContent=rho.toFixed(2);
+  $('#oP').textContent=st.obj==='ring'?`φ = 0 → ${Math.round(st.p*360)}°`:`r′ = 0 → ${(st.p*R).toFixed(2)}`;
+  $('#pLabel').textContent=st.obj==='ring'?'Sum the pieces around the ring':'Sum the rings out from the center';
+  $('#rVp').textContent=fmt(pt.V);$('#rEzp').textContent=fmt(pt.Ez);$('#rExp').textContent=fmt(pt.Ex);$('#rEyp').textContent=fmt(pt.Ey);
+  const f=field(rho,z),Vf=(a,b)=>field(Math.abs(a),b).V;
+  const Dz=-(Vf(rho,z+h)-Vf(rho,z-h))/(2*h),Dr=-(Vf(rho+h,z)-Vf(rho-h,z))/(2*h);
+  $('#cfNote').textContent=rho<1e-9?'(closed form on the axis)':st.obj==='ring'?'(elliptic integrals)':'(sum of exact rings)';
+  const wire=onWire(),surf=onDisk();
+  $('#rV').textContent=wire?'∞ (on the wire)':fmt(f.V);
+  $('#rEz').textContent=wire||surf?'—':fmt(f.Ez);$('#rEr').textContent=wire?'—':fmt(f.Er);
+  $('#rDz').textContent=wire||surf?'—':fmt(Dz);$('#rDr').textContent=wire?'—':fmt(Dr);
+  let msg;
+  if(wire)msg='P sits on the line charge, where V and E diverge.';
+  else if(surf)msg='On the disk surface V has a kink, so E_z jumps by σ/ε₀ and −∂V/∂z is undefined.';
+  else{const ok=Math.abs(f.Ez-Dz)<1e-4*Math.max(1,Math.abs(f.Ez))&&Math.abs(f.Er-Dr)<1e-4*Math.max(1,Math.abs(f.Er));
+    msg=ok?'Both components agree: E = −∇V.':`Numerical difference ${fmt(f.Ez-Dz)}, ${fmt(f.Er-Dr)} (very close to the charge).`;
+    if(rho<1e-9&&Math.abs(z)<1e-9&&st.obj==='ring')msg+=' At the center V = k_e q/R, the same as a point charge at distance R, but E = 0.';}
+  $('#agree').textContent=msg;
+  atP=st.line==='z'?{V:f.V,Es:f.Ez}:{V:f.V,Es:f.Er};
+  if(wire)atP={V:Infinity,Es:NaN};if(surf&&st.line==='z')atP={V:f.V,Es:NaN};
+  $('#capV').textContent=st.line==='z'?`Potential V along the vertical line x = ${rho.toFixed(2)}`:`Potential V along the horizontal line z = ${z.toFixed(2)}`;
+  $('#capE').innerHTML=st.line==='z'?'Field component E<sub>z</sub> along the same line':'Field component E<sub>x</sub> along the same line';
+  let note;
+  if(st.line==='x'&&st.obj==='ring')note=Math.abs(z)<0.3?'Across the plane, V rises toward the wire while along the axis it falls: the center is a saddle. The field at the center is zero, but nearby in the plane it points back toward the center.':'Off the plane, V and E_x stay finite everywhere along this line.';
+  else if(st.line==='x')note='Across the disk, V is largest above the center; E_x pushes outward, away from the axis.';
+  else if(st.obj==='ring')note=rho<0.02?'E_z peaks at z = R/√2, where V is steepest. At z = 0 the slope of V is zero, so E_z = 0 at the ring’s center.':(Math.abs(rho-st.R)<0.15?'This line passes next to the wire, so V spikes and E_z swings sharply as it goes by.':'Off the axis, E_z still vanishes at z = 0 by mirror symmetry, but the profile is no longer the axis formula.');
+  else note=rho<st.R?'This line pierces the disk, so V has a kink and E_z jumps by σ/ε₀ there.':'This line passes outside the disk, so V and E_z are smooth.';
+  if(st.lim)note+=st.obj==='disk'&&st.line==='z'?' Dashed: point charge q = σπR² at the origin; the flat lines are the infinite plane, ±σ/(2ε₀).':' Dashed: a point charge with the same total charge at the origin.';
+  $('#plotNote').textContent=note;
+}
+function drawAll(){readouts();sampleLine();drawStage();drawPlot($('#pV'),'V');drawPlot($('#pE'),'E');drawMap();draw3D();}
+function setP(rho,z){st.rho=rho;st.z=z;$('#sRho').value=rho;$('#sZ').value=z;drawAll();}
+function setObj(o){st.obj=o;$('#bRing').setAttribute('aria-pressed',o==='ring');$('#bDisk').setAttribute('aria-pressed',o==='disk');compute();renderRoutes();renderPresets();clearTraj();drawAll();}
+function setLine(l){st.line=l;$('#bLz').setAttribute('aria-pressed',l==='z');$('#bLx').setAttribute('aria-pressed',l==='x');drawAll();}
+$('#bRing').onclick=()=>setObj('ring');$('#bDisk').onclick=()=>setObj('disk');
+$('#bLz').onclick=()=>setLine('z');$('#bLx').onclick=()=>setLine('x');
+$('#toAxis').onclick=()=>setP(0,st.z);$('#toPlane').onclick=()=>setP(st.rho,0);$('#toCenter').onclick=()=>setP(0,0);
+$('#sR').oninput=e=>{st.R=+e.target.value;compute();clearTraj();drawAll();};
+$('#sZ').oninput=e=>{st.z=+e.target.value;drawAll();};
+$('#sRho').oninput=e=>{st.rho=+e.target.value;drawAll();};
+$('#sP').oninput=e=>{st.p=+e.target.value;cancelAnimationFrame(anim);readouts();drawStage();};
+$('#cLim').onchange=e=>{st.lim=e.target.checked;drawAll();};
+$('#cHeat').onchange=e=>{st.heat=e.target.checked;drawMap();};
+$('#cEq').onchange=e=>{st.eq=e.target.checked;drawMap();};
+$('#cArr').onchange=e=>{st.arr=e.target.checked;drawMap();};
+let anim=0;
+$('#play').onclick=()=>{cancelAnimationFrame(anim);const t0=performance.now(),dur=2600;
+  const step=t=>{const u=Math.min(1,(t-t0)/dur);st.p=u;$('#sP').value=u;readouts();drawStage();if(u<1)anim=requestAnimationFrame(step);};anim=requestAnimationFrame(step);};
+const ro=new ResizeObserver(()=>drawAll());[stage,$('#pV'),$('#pE'),map,$('#traj3d')].forEach(c=>ro.observe(c));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{baseKey='';drawAll();});
+new MutationObserver(()=>{baseKey='';drawAll();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+compute();renderRoutes();renderPresets();setMode('P');
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawAll);
+drawAll();
+})();
+</script>
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const K=8.99e9,FONT='"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif';
+function fit(c){const r=c.getBoundingClientRect(),d=window.devicePixelRatio||1;const w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(c.width!==w||c.height!==h){c.width=w;c.height=h;}const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return{ctx:x,w:r.width,h:r.height,d};}
+function col(){const s=getComputedStyle(document.documentElement);const g=n=>s.getPropertyValue(n).trim();return{ink:g('--ink'),muted:g('--muted'),grid:g('--grid'),line:g('--line'),e:g('--e'),v:g('--v'),panel:g('--panel'),pos:g('--pos'),neg:g('--neg')};}
+function arrow(ctx,x0,y0,x1,y1,color,w=2,dash=null,head=9){const dx=x1-x0,dy=y1-y0,L=Math.hypot(dx,dy);if(!(L>=1.5))return;ctx.save();ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=w;ctx.lineCap='round';if(dash)ctx.setLineDash(dash);const ux=dx/L,uy=dy/L,hh=Math.min(head,L*.45);ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1-ux*hh*.7,y1-uy*hh*.7);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-ux*hh-uy*hh*.45,y1-uy*hh+ux*hh*.45);ctx.lineTo(x1-ux*hh+uy*hh*.45,y1-uy*hh-ux*hh*.45);ctx.closePath();ctx.fill();ctx.restore();}
+const SUP={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+function sci(v,unit){if(!isFinite(v))return'—';const a=Math.abs(v);if(a===0)return'0 '+unit;let s;
+  if(a>=0.01&&a<1e4)s=(a>=100?a.toFixed(0):a>=10?a.toFixed(1):a.toFixed(2));
+  else{const e=Math.floor(Math.log10(a)),m=a/Math.pow(10,e);s=m.toFixed(2)+' × 10'+String(e).split('').map(c=>SUP[c]).join('');}
+  return(v<0?'−':'')+s+' '+unit;}
+const qtxt=q=>(q>0?'+':q<0?'−':'')+Math.abs(q)+' μC';
+
+/* ---------- playground ---------- */
+const cv=$('#pg'),W=20; // half-width in cm
+const PRE={
+  'Like charges':[{x:-6,y:0,q:2},{x:6,y:0,q:2}],
+  'Opposite charges':[{x:-6,y:0,q:2},{x:6,y:0,q:-1}],
+  'Dipole':[{x:0,y:2,q:1},{x:0,y:-2,q:-1}],
+  'Three charges':[{x:-7,y:-4,q:2},{x:7,y:-4,q:-1},{x:0,y:7,q:1}]
+};
+const S={ch:PRE['Opposite charges'].map(c=>({...c})),sel:0,probe:{x:0,y:8},lines:true,forces:true,pot:false,drag:null};
+let VW={};
+function view(w,h){const s=w/(2*W);return{s,H:h/(2*s),X:x=>w/2+x*s,Y:y=>h/2-y*s,ix:px=>(px-w/2)/s,iy:py=>(h/2-py)/s};}
+function E(x,y){let ex=0,ey=0;for(const c of S.ch){const dx=(x-c.x)/100,dy=(y-c.y)/100,r2=dx*dx+dy*dy;if(r2<1e-10)continue;const f=K*c.q*1e-6/(r2*Math.sqrt(r2));ex+=f*dx;ey+=f*dy;}return[ex,ey];}
+function V(x,y){let v=0;for(const c of S.ch)v+=K*c.q*1e-6/Math.max(Math.hypot(x-c.x,y-c.y)/100,1e-3);return v;}
+function forceOn(i){const a=S.ch[i],parts=[];let fx=0,fy=0;
+  S.ch.forEach((b,j)=>{if(j===i)return;const dx=(a.x-b.x)/100,dy=(a.y-b.y)/100,r=Math.hypot(dx,dy);if(r<1e-6)return;const f=K*a.q*b.q*1e-12/(r*r*r);parts.push({j,fx:f*dx,fy:f*dy,r});fx+=f*dx;fy+=f*dy;});
+  return{fx,fy,parts};}
+function trace(x,y,dir,H){const pts=[[x,y]],step=0.12;
+  for(let k=0;k<1000;k++){let [ex,ey]=E(x,y),m=Math.hypot(ex,ey);if(!(m>0))break;
+    const mx=x+dir*step/2*ex/m,my=y+dir*step/2*ey/m;[ex,ey]=E(mx,my);m=Math.hypot(ex,ey);if(!(m>0))break;
+    x+=dir*step*ex/m;y+=dir*step*ey/m;pts.push([x,y]);
+    if(Math.abs(x)>W+2||Math.abs(y)>H+2)return{pts,end:null};
+    for(const c of S.ch)if(Math.hypot(x-c.x,y-c.y)<0.3&&(dir>0?c.q<0:c.q>0))return{pts,end:c};}
+  return{pts,end:null};}
+function drawPG(){
+  const {ctx,w,h,d}=fit(cv),c=col(),v=view(w,h);VW=v;ctx.clearRect(0,0,w,h);
+  ctx.fillStyle=c.panel;ctx.fillRect(0,0,w,h);
+  if(S.pot){const cell=3,nx=Math.ceil(w/cell),ny=Math.ceil(h/cell),off=document.createElement('canvas');off.width=nx;off.height=ny;const oc=off.getContext('2d'),img=oc.createImageData(nx,ny);
+    const hex=s=>{s=s.replace('#','');return[parseInt(s.slice(0,2),16),parseInt(s.slice(2,4),16),parseInt(s.slice(4,6),16)];},P=hex(c.pos),N=hex(c.neg),B=hex(c.panel.length===7?c.panel:'#ffffff');
+    const Vref=K*1e-6/0.03;const Vg=new Float32Array(nx*ny);
+    for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const vv=V(v.ix((i+.5)*cell),v.iy((j+.5)*cell));Vg[j*nx+i]=vv;const t=Math.tanh(vv/Vref),T=t>0?P:N,a=Math.min(1,Math.abs(t))*.5,k=(j*nx+i)*4;
+      img.data[k]=B[0]+(T[0]-B[0])*a;img.data[k+1]=B[1]+(T[1]-B[1])*a;img.data[k+2]=B[2]+(T[2]-B[2])*a;img.data[k+3]=255;}
+    oc.putImageData(img,0,0);ctx.imageSmoothingEnabled=true;ctx.drawImage(off,0,0,w,h);
+    // equipotential curves
+    const levels=[];for(const m of [0.0625,0.125,0.25,0.5,1,2])levels.push(m*Vref,-m*Vref);levels.push(0);
+    ctx.save();ctx.lineWidth=1.1;
+    for(const lev of levels){ctx.strokeStyle=lev>0?c.pos:lev<0?c.neg:c.ink;ctx.globalAlpha=lev===0?.5:.8;if(lev===0)ctx.setLineDash([4,4]);else ctx.setLineDash([]);ctx.beginPath();
+      for(let j=0;j<ny-1;j++)for(let i=0;i<nx-1;i++){const a=Vg[j*nx+i],b=Vg[j*nx+i+1],cc=Vg[(j+1)*nx+i+1],dd=Vg[(j+1)*nx+i],pts=[];
+        const ed=(v1,v2,x1,y1,x2,y2)=>{if((v1<lev)!==(v2<lev)){const t=(lev-v1)/(v2-v1);pts.push([x1+(x2-x1)*t,y1+(y2-y1)*t]);}};
+        ed(a,b,i,j,i+1,j);ed(b,cc,i+1,j,i+1,j+1);ed(cc,dd,i+1,j+1,i,j+1);ed(dd,a,i,j+1,i,j);
+        for(let q=0;q+1<pts.length;q+=2){ctx.moveTo((pts[q][0]+.5)*cell,(pts[q][1]+.5)*cell);ctx.lineTo((pts[q+1][0]+.5)*cell,(pts[q+1][1]+.5)*cell);}}
+      ctx.stroke();}
+    ctx.restore();}
+  // grid
+  ctx.strokeStyle=c.grid;ctx.lineWidth=1;ctx.globalAlpha=S.pot?.5:1;
+  for(let x=-W;x<=W;x+=2){ctx.beginPath();ctx.moveTo(v.X(x)+.5,0);ctx.lineTo(v.X(x)+.5,h);ctx.stroke();}
+  for(let y=-Math.floor(v.H/2)*2;y<=v.H;y+=2){ctx.beginPath();ctx.moveTo(0,v.Y(y)+.5);ctx.lineTo(w,v.Y(y)+.5);ctx.stroke();}
+  ctx.globalAlpha=1;
+  // field lines
+  if(S.lines&&S.ch.length){
+    const pos=S.ch.filter(q=>q.q>0),neg=S.ch.filter(q=>q.q<0),sp=pos.reduce((a,b)=>a+b.q,0),sn=-neg.reduce((a,b)=>a+b.q,0),lines=[];
+    const seed=(q,dir)=>{const n=Math.max(4,Math.round(6*Math.abs(q.q)));for(let k=0;k<n;k++){const a=(k+.5)/n*2*Math.PI;const L=trace(q.x+0.32*Math.cos(a),q.y+0.32*Math.sin(a),dir,v.H);if(dir<0&&L.end)continue;lines.push({...L,dir});}};
+    pos.forEach(q=>seed(q,1));if(sn>sp||!pos.length)neg.forEach(q=>seed(q,-1));
+    ctx.strokeStyle=c.muted;ctx.lineWidth=1.2;ctx.globalAlpha=.75;
+    for(const L of lines){ctx.beginPath();L.pts.forEach((p,i)=>i?ctx.lineTo(v.X(p[0]),v.Y(p[1])):ctx.moveTo(v.X(p[0]),v.Y(p[1])));ctx.stroke();
+      const m=Math.floor(Math.min(L.pts.length-2,Math.max(1,L.pts.length*.45)));if(m>0&&L.pts.length>8){const a=L.pts[m],b=L.pts[m+1];let dx=(b[0]-a[0])*L.dir,dy=-(b[1]-a[1])*L.dir;const n=Math.hypot(dx,dy)||1;dx/=n;dy/=n;const X=v.X(a[0]),Y=v.Y(a[1]);
+        ctx.beginPath();ctx.moveTo(X+dx*5,Y+dy*5);ctx.lineTo(X-dx*4-dy*4,Y-dy*4+dx*4);ctx.lineTo(X-dx*4+dy*4,Y-dy*4-dx*4);ctx.closePath();ctx.fillStyle=c.muted;ctx.fill();}}
+    ctx.globalAlpha=1;}
+  // forces
+  const Fref=K*1e-12/0.01,len=F=>Math.min(170,50*Math.sqrt(F/Fref));
+  if(S.forces)S.ch.forEach((a,i)=>{const f=forceOn(i),X=v.X(a.x),Y=v.Y(a.y);
+    for(const p of f.parts){const m=Math.hypot(p.fx,p.fy);if(!(m>0))continue;const L=len(m);arrow(ctx,X,Y,X+p.fx/m*L,Y-p.fy/m*L,S.ch[p.j].q>0?c.pos:c.neg,1.6,[4,3],8);}
+    const m=Math.hypot(f.fx,f.fy);if(m>0&&f.parts.length>1){const L=len(m);arrow(ctx,X,Y,X+f.fx/m*L,Y-f.fy/m*L,c.ink,3.4,null,12);}
+    else if(m>0){const L=len(m);arrow(ctx,X,Y,X+f.fx/m*L,Y-f.fy/m*L,c.ink,3.4,null,12);}});
+  // charges
+  S.ch.forEach((a,i)=>{const X=v.X(a.x),Y=v.Y(a.y),r=10+2.2*Math.sqrt(Math.abs(a.q));
+    ctx.fillStyle=a.q>0?c.pos:a.q<0?c.neg:c.muted;ctx.beginPath();ctx.arc(X,Y,r,0,7);ctx.fill();
+    if(i===S.sel){ctx.strokeStyle=c.ink;ctx.lineWidth=2;ctx.beginPath();ctx.arc(X,Y,r+4,0,7);ctx.stroke();}
+    ctx.fillStyle=c.panel;ctx.font=`700 ${r>13?14:12}px ${FONT}`;ctx.textAlign='center';ctx.fillText(a.q>0?'+':a.q<0?'−':'0',X,Y+5);
+    ctx.fillStyle=c.ink;ctx.font=`600 12px ${FONT}`;ctx.fillText(qtxt(a.q),X,Y+r+16);});
+  // probe
+  {const p=S.probe,X=v.X(p.x),Y=v.Y(p.y),[ex,ey]=E(p.x,p.y),m=Math.hypot(ex,ey),Eref=K*1e-6/0.01;
+   if(m>0){const L=Math.min(130,34*Math.sqrt(m/Eref));arrow(ctx,X,Y,X+ex/m*L,Y-ey/m*L,c.e,2.6,null,10);}
+   ctx.strokeStyle=c.e;ctx.fillStyle=c.panel;ctx.lineWidth=2;ctx.beginPath();ctx.arc(X,Y,7,0,7);ctx.fill();ctx.stroke();
+   ctx.fillStyle=c.e;ctx.font=`italic 600 13px ${FONT}`;ctx.textAlign='right';ctx.fillText('q₀',X-10,Y+16);}
+  ctx.textAlign='left';
+  readPG();
+}
+function readPG(){
+  const sel=S.ch[S.sel];
+  if(!sel){$('#pgQo').textContent='—';$('#pgQ').disabled=true;$('#pgForce').innerHTML='<dt>No charge selected</dt><dd></dd>';$('#pgThird').textContent='';}
+  else{$('#pgQ').disabled=false;$('#pgQ').value=sel.q;$('#pgQo').textContent=qtxt(sel.q);
+    const f=forceOn(S.sel),m=Math.hypot(f.fx,f.fy),ang=Math.atan2(f.fy,f.fx)*180/Math.PI;
+    let rows=f.parts.map(p=>{const b=S.ch[p.j],mm=Math.hypot(p.fx,p.fy),kind=sel.q*b.q>0?'repulsive':sel.q*b.q<0?'attractive':'none';
+      return `<dt>from <span class="${b.q>0?'cP':'cN'}">${qtxt(b.q)}</span> at ${(p.r*100).toFixed(1)} cm</dt><dd>${sci(mm,'N')}, ${kind}</dd>`;}).join('');
+    rows+=`<dt><b>Net force</b> (vector sum)</dt><dd><b>${sci(m,'N')}</b>${m>0?`, at ${ang.toFixed(0)}°`:''}</dd>`;
+    $('#pgForce').innerHTML=rows;
+    if(S.ch.length===2){const o=forceOn(1-S.sel);$('#pgThird').textContent=`Newton’s third law: the other charge feels ${sci(Math.hypot(o.fx,o.fy),'N')} in exactly the opposite direction.`;}
+    else $('#pgThird').textContent=S.ch.length>2?'Each thin arrow is one Coulomb pair; the thick arrow is their vector sum (superposition).':'Add another charge to see a force.';}
+  const p=S.probe,[ex,ey]=E(p.x,p.y),m=Math.hypot(ex,ey);
+  $('#pgProbe').innerHTML=`<dt>Field |E|</dt><dd class="cE">${sci(m,'N/C')}</dd><dt>Force on q₀, F = q₀E</dt><dd>${sci(m*1e-9,'N')}</dd><dt>Potential V</dt><dd class="cV">${sci(V(p.x,p.y),'V')}</dd>`;
+}
+function hit(px,py){const v=VW;let best=null,bd=1e9;
+  const pd=Math.hypot(px-v.X(S.probe.x),py-v.Y(S.probe.y));if(pd<14){best={probe:true};bd=pd;}
+  S.ch.forEach((c,i)=>{const dd=Math.hypot(px-v.X(c.x),py-v.Y(c.y));if(dd<18&&dd<bd){best={i};bd=dd;}});return best;}
+const pxy=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];};
+cv.addEventListener('pointerdown',e=>{const [x,y]=pxy(e),h=hit(x,y);if(!h)return;S.drag=h;if(h.i!==undefined)S.sel=h.i;cv.setPointerCapture(e.pointerId);drawPG();});
+cv.addEventListener('pointermove',e=>{const [x,y]=pxy(e);if(!S.drag){cv.style.cursor=hit(x,y)?'grab':'default';return;}
+  const v=VW,wx=Math.max(-W+0.5,Math.min(W-0.5,v.ix(x))),wy=Math.max(-v.H+0.5,Math.min(v.H-0.5,v.iy(y)));
+  if(S.drag.probe){S.probe.x=wx;S.probe.y=wy;}else{const c=S.ch[S.drag.i];c.x=wx;c.y=wy;}drawPG();});
+const endPG=()=>{S.drag=null;};cv.addEventListener('pointerup',endPG);cv.addEventListener('pointercancel',endPG);
+const PROBE={'Like charges':{x:0,y:6},'Opposite charges':{x:0,y:8},'Dipole':{x:7,y:6},'Three charges':{x:11,y:6}};
+function loadPreset(name){S.ch=PRE[name].map(c=>({...c}));S.sel=0;S.probe={...PROBE[name]};drawPG();}
+$('#pgPresets').innerHTML=Object.keys(PRE).map(k=>`<button class="btn plain" data-k="${k}">${k}</button>`).join('');
+$('#pgPresets').querySelectorAll('button').forEach(b=>b.onclick=()=>loadPreset(b.dataset.k));
+function addCharge(q){if(S.ch.length>=6)return;let best=null,bs=-1;
+  for(let k=0;k<40;k++){const x=(Math.random()*2-1)*(W-4),y=(Math.random()*2-1)*Math.max(2,VW.H-3);const dmin=Math.min(...S.ch.map(c=>Math.hypot(c.x-x,c.y-y)),99);if(dmin>bs){bs=dmin;best={x,y};}}
+  S.ch.push({...best,q});S.sel=S.ch.length-1;drawPG();}
+$('#pgAddP').onclick=()=>addCharge(1);$('#pgAddN').onclick=()=>addCharge(-1);
+$('#pgDel').onclick=()=>{if(S.sel<0||!S.ch.length)return;S.ch.splice(S.sel,1);S.sel=S.ch.length?0:-1;drawPG();};
+$('#pgQ').oninput=e=>{const c=S.ch[S.sel];if(c){c.q=+e.target.value;drawPG();}};
+$('#pgLines').onchange=e=>{S.lines=e.target.checked;drawPG();};
+$('#pgForces').onchange=e=>{S.forces=e.target.checked;drawPG();};
+$('#pgPot').onchange=e=>{S.pot=e.target.checked;drawPG();};
+
+/* ---------- dipole axis plot ---------- */
+const dp=$('#dpE'),x0=0.6,x1=40,lx=t=>Math.exp(Math.log(x0)+t*(Math.log(x1)-Math.log(x0)));
+let dz=lx(0.35);
+const Eex=x=>1/((x-.5)**2)-1/((x+.5)**2),Eap=x=>2/(x**3),Epc=x=>1/(x*x),Vex=x=>1/(x*x-.25),Vap=x=>1/(x*x);
+function drawDP(){
+  const {ctx,w,h}=fit(dp),c=col();ctx.clearRect(0,0,w,h);
+  const m={l:52,r:14,t:12,b:28},ly0=Math.log10(Eap(x1))-0.3,ly1=Math.log10(Eex(x0))+0.3;
+  const X=x=>m.l+(Math.log10(x)-Math.log10(x0))/(Math.log10(x1)-Math.log10(x0))*(w-m.l-m.r),Y=y=>m.t+(ly1-Math.log10(y))/(ly1-ly0)*(h-m.t-m.b);
+  ctx.font=`13px ${FONT}`;ctx.strokeStyle=c.grid;ctx.fillStyle=c.muted;ctx.lineWidth=1;
+  for(let e=Math.ceil(ly0);e<=Math.floor(ly1);e++){ctx.beginPath();ctx.moveTo(m.l,Y(10**e));ctx.lineTo(w-m.r,Y(10**e));ctx.stroke();ctx.textAlign='right';ctx.fillText('10'+String(e).split('').map(ch=>SUP[ch]).join(''),m.l-6,Y(10**e)+4);}
+  for(const xv of [1,2,5,10,20]){ctx.beginPath();ctx.moveTo(X(xv),m.t);ctx.lineTo(X(xv),h-m.b);ctx.stroke();ctx.textAlign='center';ctx.fillText(String(xv),X(xv),h-9);}
+  ctx.textAlign='right';ctx.font=`italic 13px ${FONT}`;ctx.fillText('z/d',w-m.r,h-9);
+  ctx.save();ctx.beginPath();ctx.rect(m.l,m.t,w-m.l-m.r,h-m.t-m.b);ctx.clip();
+  const curve=(f,color,wd,dash)=>{ctx.save();ctx.strokeStyle=color;ctx.lineWidth=wd;if(dash)ctx.setLineDash(dash);ctx.beginPath();for(let i=0;i<=400;i++){const x=lx(i/400),yy=Y(f(x));i?ctx.lineTo(X(x),yy):ctx.moveTo(X(x),yy);}ctx.stroke();ctx.restore();};
+  curve(Epc,c.muted,1.6,[5,4]);curve(Eap,c.e,1.8,[7,4]);curve(Eex,c.e,2.8);
+  ctx.restore();
+  ctx.save();ctx.strokeStyle=c.ink;ctx.globalAlpha=.4;ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(X(dz),m.t);ctx.lineTo(X(dz),h-m.b);ctx.stroke();ctx.restore();
+  ctx.fillStyle=c.ink;ctx.beginPath();ctx.arc(X(dz),Y(Eex(dz)),5,0,7);ctx.fill();
+  ctx.font=`600 13px ${FONT}`;ctx.textAlign='right';
+  ctx.fillStyle=c.e;ctx.fillText('exact (solid)   p/(2πε₀z³) (dashed): slope −3',w-m.r-6,m.t+16);
+  ctx.fillStyle=c.muted;ctx.fillText('single charge q/(4πε₀z²): slope −2',w-m.r-6,m.t+34);
+  ctx.textAlign='left';
+  const err=(Eap(dz)/Eex(dz)-1)*100;
+  $('#dpZo').textContent=dz.toFixed(2);
+  $('#dpRead').innerHTML=`<dt>Exact E, in k q/d²</dt><dd class="cE">${Eex(dz).toPrecision(4)}</dd>
+    <dt>Dipole approximation 2(d/z)³</dt><dd class="cE">${Eap(dz).toPrecision(4)}</dd>
+    <dt>Approximation error</dt><dd>${err.toFixed(err<1&&err>-1?3:1)} %</dd>
+    <dt>Exact V on the axis, in k q/d</dt><dd class="cV">${Vex(dz).toPrecision(4)}</dd>
+    <dt>Approximation p/(4πε₀z²), in k q/d</dt><dd class="cV">${Vap(dz).toPrecision(4)}</dd>`;
+}
+$('#dpZ').oninput=e=>{dz=lx(+e.target.value);drawDP();};
+$('#dpShow').onclick=()=>{loadPreset('Dipole');document.getElementById('basics').scrollIntoView({behavior:'smooth'});};
+
+
+/* ---------- Coulomb vs gravity ---------- */
+const G=6.674e-11,QE=1.602e-19,ME=9.109e-31,MP=1.673e-27;
+const PAIRS=[
+ {key:'ep',label:'Electron and proton',a:{n:'electron',q:-QE,m:ME,r:7},b:{n:'proton',q:QE,m:MP,r:11},r0:5.29e-11,note:'At r = 5.29 × 10⁻¹¹ m (the Bohr radius of hydrogen). This electric attraction is what holds the atom together; gravity is irrelevant.'},
+ {key:'pp',label:'Two protons',a:{n:'proton',q:QE,m:MP,r:11},b:{n:'proton',q:QE,m:MP,r:11},r0:1e-15,note:'At r = 10⁻¹⁵ m, about the size of a nucleus, the electric repulsion is hundreds of newtons. Gravity cannot hold a nucleus together; a third force, the strong nuclear force, does.'},
+ {key:'ee',label:'Two electrons',a:{n:'electron',q:-QE,m:ME,r:7},b:{n:'electron',q:-QE,m:ME,r:7},r0:1e-10,note:'Like charges repel, yet gravity still attracts. Here the two forces point in opposite directions.'},
+ {key:'balls',label:'Two 1 kg balls, ±1 μC',a:{n:'1 kg, +1 μC',q:1e-6,m:1,r:16},b:{n:'1 kg, −1 μC',q:-1e-6,m:1,r:16},r0:1,note:'A microcoulomb is a tiny excess charge, about 6 × 10¹² electrons out of roughly 10²⁶ in each ball, yet its force still beats gravity by a factor of about 10⁸.'},
+ {key:'em',label:'Earth and Moon',a:{n:'Earth',q:0,m:5.972e24,r:22},b:{n:'Moon',q:0,m:7.342e22,r:12},r0:3.844e8,note:'Planets and moons are electrically neutral to an excellent approximation, so the electric force vanishes and gravity, which never cancels, rules on large scales.'}];
+let cgP=PAIRS[0],cgR=PAIRS[0].r0;const LOGCAP='Force in newtons, log scale. Arrows above show directions only.';
+$('#cgPair').innerHTML=PAIRS.map((p,i)=>`<button data-i="${i}" aria-pressed="${i===0}">${p.label}</button>`).join('');
+$('#cgPair').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('#cgPair').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));cgP=PAIRS[+b.dataset.i];$('#cgR').value=0;cgR=cgP.r0;drawCG();});
+$('#cgR').oninput=e=>{cgR=cgP.r0*Math.pow(10,+e.target.value);drawCG();};
+function drawCG(){
+  const cv=$('#cg'),{ctx,w,h}=fit(cv),c=col();ctx.clearRect(0,0,w,h);ctx.fillStyle=c.panel;ctx.fillRect(0,0,w,h);
+  const {a,b}=cgP,Fe=K*a.q*b.q/(cgR*cgR),Fg=G*a.m*b.m/(cgR*cgR),yA=h*0.32,xa=w*0.24,xb=w*0.76;
+  // particles
+  ctx.save();ctx.strokeStyle=c.line;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(xa,yA);ctx.lineTo(xb,yA);ctx.stroke();ctx.restore();
+  ctx.fillStyle=c.muted;ctx.font=`italic 600 14px ${FONT}`;ctx.textAlign='center';ctx.fillText('r = '+sci(cgR,'m'),w/2,yA-10);
+  const dot=(x,p)=>{ctx.fillStyle=p.q>0?c.pos:p.q<0?c.neg:c.muted;ctx.beginPath();ctx.arc(x,yA,p.r,0,7);ctx.fill();
+    if(p.q){ctx.fillStyle=c.panel;ctx.font=`700 ${p.r>9?13:11}px ${FONT}`;ctx.fillText(p.q>0?'+':'−',x,yA+4);}
+    ctx.fillStyle=c.ink;ctx.font=`600 13px ${FONT}`;ctx.fillText(p.n,x,yA+p.r+52);};
+  dot(xa,a);dot(xb,b);
+  // arrows: electric above, gravity below (directions only)
+  const L=Math.min(70,w*0.1),ea=Math.sign(Fe); // ea>0 repulsive
+  if(Fe!==0){arrow(ctx,xa,yA-a.r-14,xa-ea*L,yA-a.r-14,c.e,3,null,10);arrow(ctx,xb,yA-b.r-14,xb+ea*L,yA-b.r-14,c.e,3,null,10);}
+  arrow(ctx,xa,yA+a.r+16,xa+L,yA+a.r+16,c.muted,2.4,[5,3],9);arrow(ctx,xb,yA+b.r+16,xb-L,yA+b.r+16,c.muted,2.4,[5,3],9);
+  ctx.font=`600 12px ${FONT}`;ctx.textAlign='left';ctx.fillStyle=c.e;ctx.fillText(Fe>0?'electric: repulsive':Fe<0?'electric: attractive':'electric: none (neutral)',12,20);
+  ctx.fillStyle=c.muted;ctx.fillText('gravitational: always attractive',12,38);
+  // log bars
+  const lo=-55,hi=25,bx0=w*0.22,bx1=w-24,X=v=>bx0+(Math.log10(v)-lo)/(hi-lo)*(bx1-bx0),y1=h*0.66,y2=h*0.77;
+  ctx.textAlign='left';ctx.fillStyle=c.muted;ctx.font=`12px ${FONT}`;ctx.fillText(LOGCAP,bx0,y1-24);
+  ctx.strokeStyle=c.grid;ctx.fillStyle=c.muted;ctx.font=`12px ${FONT}`;ctx.textAlign='center';
+  for(let e=lo+5;e<=hi;e+=10){const x=X(10**e);ctx.beginPath();ctx.moveTo(x,y1-16);ctx.lineTo(x,y2+16);ctx.stroke();ctx.fillText('10'+String(e).split('').map(ch=>SUP[ch]).join(''),x,y2+32);}
+  const bar=(y,v,color,label)=>{ctx.textAlign='right';ctx.fillStyle=c.ink;ctx.font=`600 13px ${FONT}`;ctx.fillText(label,bx0-10,y+5);
+    if(v>0){ctx.fillStyle=color;ctx.fillRect(bx0,y-8,Math.max(2,X(v)-bx0),16);}else{ctx.textAlign='left';ctx.fillStyle=c.muted;ctx.fillText('0',bx0+6,y+5);}};
+  bar(y1,Math.abs(Fe),c.e,'Electric');bar(y2,Fg,c.muted,'Gravitational');
+  ctx.textAlign='left';
+  const ratio=Fg>0?Math.abs(Fe)/Fg:Infinity;
+  $('#cgRo').textContent=sci(cgR,'m');
+  $('#cgRead').innerHTML=`<dt>Electric force, k|q₁q₂|/r²</dt><dd class="cE">${sci(Math.abs(Fe),'N')}${Fe>0?', repulsive':Fe<0?', attractive':''}</dd>
+    <dt>Gravitational force, Gm₁m₂/r²</dt><dd>${sci(Fg,'N')}, attractive</dd>
+    <dt>Ratio F<sub>electric</sub>/F<sub>gravity</sub></dt><dd><b>${Fe===0?'0':sci(ratio,'')}</b></dd>`;
+  $('#cgNote').textContent=cgP.note+(Fe!==0?' Both forces scale as 1/r², so moving the slider changes them together and the ratio stays the same.':'');
+}
+const ro=new ResizeObserver(()=>{drawPG();drawDP();drawCG();});ro.observe(cv);ro.observe(dp);ro.observe($('#cg'));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{drawPG();drawDP();drawCG();});
+new MutationObserver(()=>{drawPG();drawDP();drawCG();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawPG();drawDP();drawCG();});
+drawPG();drawDP();drawCG();
+})();
+</script>
+
+</body>
+</html>
