@@ -109,7 +109,3 @@ README.md       this file
 - Created by **Claude Opus 5.5**.
 - Based on **Prof. Sang Hoon Lee**'s general physics lecture notes on Coulomb's law, the electric field, and the electric field and potential of point charges, dipoles and continuous charge distributions.
 - Also based on the note *The Electric Potential and Field of a Uniformly Charged Ring and Spherical Shell: Why Equal Potentials Do Not Imply Equal Fields*, inspired by a lecture by Sang Hoon Lee.
-
-## License
-
-No license has been chosen yet. Add a `LICENSE` file (for example MIT or CC BY 4.0) to state how others may use this work.
