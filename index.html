@@ -152,13 +152,25 @@ footer b{color:var(--ink);font-weight:600}
   .hint{top:10px;bottom:auto}
 }
 </style>
+<script>try { const t = localStorage.getItem("netsci-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+button.theme-btn{position:fixed; z-index:20; top:calc(env(safe-area-inset-top, 0px) + 12px); right:calc(env(safe-area-inset-right, 0px) + 12px);
+  width:40px; height:40px; padding:0; border-radius:50%; display:grid; place-items:center; cursor:pointer;
+  background:var(--panel); color:var(--ink); border:1px solid var(--line); box-shadow:0 1px 4px rgba(0,0,0,.12)}
+button.theme-btn:hover{background:var(--panel); color:var(--ink); border-color:var(--ink)}
+button.theme-btn:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
+@media (max-width:640px){ .lang{position:static;text-align:right;margin:0 52px 4px 0} }
+@media (max-width:640px){ h1{padding-right:44px} }
+button.theme-btn svg{width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+</style>
 </head>
 <body>
+<button id="themeBtn" class="theme-btn" type="button" aria-label="Switch to light mode"></button>
 <div class="wrap">
 <header class="intro">
   <p class="lang"><a href="index_ko.html" hreflang="ko" lang="ko">한국어</a></p>
   <h1>Electric charge, field and potential, step by step</h1>
-  <p class="byline">Based on Prof. Sang Hoon Lee’s physics 2 lecture notes. Created by Claude Opus 5.5.</p>
+  <p class="byline">Based on Prof. Sang Hoon Lee’s general physics lecture notes. Created by Claude Opus 5.5.</p>
   <p class="lede">From Coulomb’s law between two point charges, to the field and potential of a dipole, to continuous charge on a ring and a disk. Every picture is live: drag the charges and move the sliders.</p>
   <nav class="toc" aria-label="Contents">
     <a href="#basics"><b>1</b> Charges, forces and fields</a>
@@ -446,7 +458,7 @@ footer b{color:var(--ink);font-weight:600}
 </section>
 
 <footer>
-  <span>Created by <b>Claude Opus 5.5</b>, based on <b>Prof. Sang Hoon Lee</b>’s physics 2 lecture notes on Coulomb’s law, the electric field and the electric potential, and on the note “The Electric Potential and Field of a Uniformly Charged Ring and Spherical Shell.”</span>
+  <span>Created by <b>Claude Opus 5.5</b>, based on <b>Prof. Sang Hoon Lee</b>’s general physics lecture notes on Coulomb’s law, the electric field and the electric potential, and on the note “The Electric Potential and Field of a Uniformly Charged Ring and Spherical Shell.”</span>
   <a href="index_ko.html" hreflang="ko" lang="ko">한국어 버전</a>
 </footer>
 </div>
@@ -1231,5 +1243,20 @@ drawPG();drawDP();drawCG();
 })();
 </script>
 
+<script>
+(() => {
+  // light/dark switch; the choice is remembered across all of the course demos
+  const btn = document.getElementById("themeBtn"), root = document.documentElement, mq = matchMedia("(prefers-color-scheme: dark)");
+  const SUN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>';
+  const MOON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>';
+  const current = () => root.dataset.theme || (mq.matches ? "dark" : "light");
+  const sync = () => { const dark = current() === "dark", label = dark ? "Switch to light mode" : "Switch to dark mode";
+    btn.innerHTML = dark ? SUN : MOON; btn.setAttribute("aria-label", label); btn.title = label; };
+  btn.addEventListener("click", () => { const next = current() === "dark" ? "light" : "dark"; root.dataset.theme = next;
+    try { localStorage.setItem("netsci-theme", next); } catch (e) {} sync(); });
+  mq.addEventListener("change", sync);
+  sync();
+})();
+</script>
 </body>
 </html>
