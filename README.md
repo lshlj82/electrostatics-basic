@@ -65,16 +65,16 @@ The page has five parts.
 
 ## Physics
 
-With k_e = 1/(4πε₀), on the axis (z ≥ 0 for the disk):
+With $`k_e = 1/(4\pi\varepsilon_0)`$, on the axis ($`z \ge 0`$ for the disk):
 
-| | Potential V(z) | Field E_z(z) |
+| | Potential $`V(z)`$ | Field $`E_z(z)`$ |
 |---|---|---|
-| Ring (charge q, radius R) | k_e q / √(z² + R²) | k_e q z / (z² + R²)^(3/2) |
-| Disk (surface density σ, radius R) | (σ / 2ε₀) (√(z² + R²) − z) | (σ / 2ε₀) (1 − z / √(z² + R²)) |
+| Ring (charge $`q`$, radius $`R`$) | $`\dfrac{k_e q}{\sqrt{z^2 + R^2}}`$ | $`\dfrac{k_e q z}{(z^2 + R^2)^{3/2}}`$ |
+| Disk (surface density $`\sigma`$, radius $`R`$) | $`\dfrac{\sigma}{2\varepsilon_0}\left(\sqrt{z^2 + R^2} - z\right)`$ | $`\dfrac{\sigma}{2\varepsilon_0}\left(1 - \dfrac{z}{\sqrt{z^2 + R^2}}\right)`$ |
 
-Off the axis, the ring's V, E_z and E_ρ are evaluated from complete elliptic integrals K(k) and E(k), with k² = 4Rρ / ((R + ρ)² + z²). The disk off the axis is built as a sum of exact rings.
+Off the axis, the ring's $`V`$, $`E_z`$ and $`E_\rho`$ are evaluated from complete elliptic integrals $`K(k)`$ and $`E(k)`$, with $`k^2 = \frac{4R\rho}{(R + \rho)^2 + z^2}`$. The disk off the axis is built as a sum of exact rings.
 
-Near the ring's center, V ≈ (k_e q / R)(1 + (x² + y² − 2z²) / 4R²). This is a saddle point, which gives small-oscillation frequencies ω_z² = 2ω_ρ² for the constrained motions.
+Near the ring's center, $`V \approx \frac{k_e q}{R}\left(1 + \frac{x^2 + y^2 - 2z^2}{4R^2}\right)`$. This is a saddle point, which gives small-oscillation frequencies $`\omega_z^2 = 2\omega_\rho^2`$ for the constrained motions.
 
 ## Units and numerics
 
