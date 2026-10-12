@@ -246,7 +246,7 @@ button.theme-btn svg{width:20px; height:20px; fill:none; stroke:currentColor; st
   <p class="sub">전하와 시험전하 q₀를 끌어 보세요. 각 전하의 화살표는 다른 모든 전하가 작용하는 Coulomb 힘(가는 선, 힘을 작용하는 전하의 색)과 그 벡터 합(굵은 선)입니다. q₀의 파란 화살표는 그곳의 E입니다. 퍼텐셜을 켜면 등퍼텐셜선이 전기력선과 직각으로 만나는 모습을 볼 수 있습니다.</p>
   <div class="mapgrid">
     <div class="mapbox"><canvas id="pg" style="display:block;width:100%;aspect-ratio:16/11;touch-action:none;cursor:default" aria-label="끌어서 옮길 수 있는 점전하와 힘, 전기력선, 퍼텐셜"></canvas>
-      <div class="hint">전하는 μC, 거리는 cm 단위입니다. 화살표 길이는 √|F|에 비례하게 그려서 작은 힘과 큰 힘이 모두 보이도록 했습니다.</div></div>
+      <div class="hint">전하는 μC, 거리는 cm 단위입니다. 화살표 길이는 <math class="inl"><msqrt><mo stretchy="false">|</mo><mi>F</mi><mo stretchy="false">|</mo></msqrt></math>에 비례하게 그려서 작은 힘과 큰 힘이 모두 보이도록 했습니다.</div></div>
     <div>
       <div class="group">
         <p class="group-title">시작 배치</p>
@@ -1053,6 +1053,7 @@ const PRE={
   '쌍극자':[{x:0,y:2,q:1},{x:0,y:-2,q:-1}],
   '전하 세 개':[{x:-7,y:-4,q:2},{x:7,y:-4,q:-1},{x:0,y:7,q:1}]
 };
+const LPC=16,ARW=110; // field lines per μC; px between arrowheads along a field line
 const S={ch:PRE['다른 부호 전하'].map(c=>({...c})),sel:0,probe:{x:0,y:8},lines:true,forces:true,pot:false,drag:null};
 let VW={};
 function view(w,h){const s=w/(2*W);return{s,H:h/(2*s),X:x=>w/2+x*s,Y:y=>h/2-y*s,ix:px=>(px-w/2)/s,iy:py=>(h/2-py)/s};}
@@ -1094,13 +1095,27 @@ function drawPG(){
   ctx.globalAlpha=1;
   // field lines
   if(S.lines&&S.ch.length){
-    const pos=S.ch.filter(q=>q.q>0),neg=S.ch.filter(q=>q.q<0),sp=pos.reduce((a,b)=>a+b.q,0),sn=-neg.reduce((a,b)=>a+b.q,0),lines=[];
-    const seed=(q,dir)=>{const n=Math.max(4,Math.round(6*Math.abs(q.q)));for(let k=0;k<n;k++){const a=(k+.5)/n*2*Math.PI;const L=trace(q.x+0.32*Math.cos(a),q.y+0.32*Math.sin(a),dir,v.H);if(dir<0&&L.end)continue;lines.push({...L,dir});}};
-    pos.forEach(q=>seed(q,1));if(sn>sp||!pos.length)neg.forEach(q=>seed(q,-1));
-    ctx.strokeStyle=c.muted;ctx.lineWidth=1.2;ctx.globalAlpha=.75;
-    for(const L of lines){ctx.beginPath();L.pts.forEach((p,i)=>i?ctx.lineTo(v.X(p[0]),v.Y(p[1])):ctx.moveTo(v.X(p[0]),v.Y(p[1])));ctx.stroke();
-      const m=Math.floor(Math.min(L.pts.length-2,Math.max(1,L.pts.length*.45)));if(m>0&&L.pts.length>8){const a=L.pts[m],b=L.pts[m+1];let dx=(b[0]-a[0])*L.dir,dy=-(b[1]-a[1])*L.dir;const n=Math.hypot(dx,dy)||1;dx/=n;dy/=n;const X=v.X(a[0]),Y=v.Y(a[1]);
-        ctx.beginPath();ctx.moveTo(X+dx*5,Y+dy*5);ctx.lineTo(X-dx*4-dy*4,Y-dy*4+dx*4);ctx.lineTo(X-dx*4+dy*4,Y-dy*4-dx*4);ctx.closePath();ctx.fillStyle=c.muted;ctx.fill();}}
+    const pos=S.ch.filter(q=>q.q>0),neg=S.ch.filter(q=>q.q<0),lines=[];
+    // Lines start evenly spaced on each + charge. A − charge must receive lines from every direction,
+    // so we look at where the forward lines actually arrive on it and trace extra lines backward
+    // into any angular gap wider than its own spacing (e.g. the side facing away from the + charge).
+    const TAU=2*Math.PI,nOf=q=>Math.max(8,Math.round(LPC*Math.abs(q.q))),go=(q,a,dir)=>({...trace(q.x+0.32*Math.cos(a),q.y+0.32*Math.sin(a),dir,v.H),dir});
+    pos.forEach(q=>{const n=nOf(q);for(let k=0;k<n;k++)lines.push(go(q,(k+.5)/n*TAU,1));});
+    neg.forEach(q=>{const n=nOf(q),spc=TAU/n;
+      const A=lines.filter(L=>L.end===q).map(L=>{const p=L.pts[L.pts.length-1];return(Math.atan2(p[1]-q.y,p[0]-q.x)+TAU)%TAU;}).sort((a,b)=>a-b);
+      if(!A.length){for(let k=0;k<n;k++)lines.push(go(q,(k+.5)/n*TAU,-1));return;}
+      A.forEach((a,i)=>{const g=(i+1<A.length?A[i+1]:A[0]+TAU)-a,m=Math.round(g/spc)-1;for(let j=1;j<=m;j++)lines.push(go(q,a+g*j/(m+1),-1));});});
+    ctx.strokeStyle=c.muted;ctx.lineWidth=1.1;ctx.globalAlpha=.75;
+    // Arrowheads every ARW px of screen length (at least one per line), kept clear of the charges, pointing along E.
+    ctx.fillStyle=c.muted;
+    for(const L of lines){const P=L.pts.map(p=>[v.X(p[0]),v.Y(p[1])]),s=[0];
+      ctx.beginPath();P.forEach((p,i)=>{if(i){ctx.lineTo(p[0],p[1]);s.push(s[i-1]+Math.hypot(p[0]-P[i-1][0],p[1]-P[i-1][1]));}else ctx.moveTo(p[0],p[1]);});ctx.stroke();
+      const tot=s[s.length-1],mg=26;if(tot<2*mg)continue;
+      const k=Math.max(1,Math.round((tot-2*mg)/ARW)),gap=(tot-2*mg)/k;let i=0;
+      for(let j=0;j<k;j++){const at=mg+gap*(j+.5);while(i<s.length-2&&s[i+1]<at)i++;
+        const a=P[i],b=P[i+1],t=(at-s[i])/((s[i+1]-s[i])||1),X=a[0]+(b[0]-a[0])*t,Y=a[1]+(b[1]-a[1])*t;
+        let dx=(b[0]-a[0])*L.dir,dy=(b[1]-a[1])*L.dir;const n=Math.hypot(dx,dy)||1;dx/=n;dy/=n;
+        ctx.beginPath();ctx.moveTo(X+dx*5,Y+dy*5);ctx.lineTo(X-dx*4-dy*3.5,Y-dy*4+dx*3.5);ctx.lineTo(X-dx*4+dy*3.5,Y-dy*4-dx*3.5);ctx.closePath();ctx.fill();}}
     ctx.globalAlpha=1;}
   // forces
   const Fref=K*1e-12/0.01,len=F=>Math.min(170,50*Math.sqrt(F/Fref));
