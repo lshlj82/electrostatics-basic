@@ -27,6 +27,7 @@ The page has five parts.
   - The test charge reports E, the force q₀E and V in SI units.
 
 **2. The electric dipole**
+- A field-line picture of the dipole, with the dipole moment p and the point on the axis that the slider moves.
 - The exact on-axis field compared with the dipole approximation p/(2πε₀z³) and with a single charge, on a log–log plot (slopes −3 and −2).
 - Readouts of the approximation error and of the on-axis potential.
 

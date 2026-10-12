@@ -278,10 +278,10 @@ button.theme-btn svg{width:20px; height:20px; fill:none; stroke:currentColor; st
   <p class="sub">Two equal and opposite charges ±q a distance d apart. Molecules such as water behave like this: the oxygen side is slightly negative and the hydrogen side slightly positive.</p>
   <div class="plots">
     <div>
+      <div class="plotbox"><div class="cap">Field lines of the dipole, with the point on the axis</div><canvas id="dpF" style="height:260px" aria-label="Field lines of an electric dipole, with the point at distance z on its axis"></canvas></div>
       <div class="plotbox"><div class="cap cE">Field on the axis, |E| in units of k q/d² (log–log)</div><canvas id="dpE" aria-label="Log-log plot of the dipole's on-axis field, exact and approximate, compared with a single charge"></canvas></div>
       <div class="ctl" style="margin-top:14px"><label for="dpZ"><span>Distance along the axis, <i>z</i>/<i>d</i></span> <output id="dpZo"></output></label><input id="dpZ" type="range" min="0" max="1" step="0.001" value="0.35"></div>
       <div class="simbox" style="margin-top:10px"><dl class="kv" id="dpRead"></dl></div>
-      <div class="row" style="margin-top:10px"><button class="btn plain" id="dpShow">Show a dipole in the playground</button></div>
     </div>
     <div class="note">
       <p>On the axis, at distance z from the center, the two fields point opposite ways:</p>
@@ -1177,6 +1177,7 @@ const dp=$('#dpE'),x0=0.6,x1=40,lx=t=>Math.exp(Math.log(x0)+t*(Math.log(x1)-Math
 let dz=lx(0.35);
 const Eex=x=>1/((x-.5)**2)-1/((x+.5)**2),Eap=x=>2/(x**3),Epc=x=>1/(x*x),Vex=x=>1/(x*x-.25),Vap=x=>1/(x*x);
 function drawDP(){
+  drawDF();
   const {ctx,w,h}=fit(dp),c=col();ctx.clearRect(0,0,w,h);
   const m={l:52,r:14,t:12,b:28},ly0=Math.log10(Eap(x1))-0.3,ly1=Math.log10(Eex(x0))+0.3;
   const X=x=>m.l+(Math.log10(x)-Math.log10(x0))/(Math.log10(x1)-Math.log10(x0))*(w-m.l-m.r),Y=y=>m.t+(ly1-Math.log10(y))/(ly1-ly0)*(h-m.t-m.b);
@@ -1202,8 +1203,39 @@ function drawDP(){
     <dt>Exact V on the axis, in k q/d</dt><dd class="cV">${Vex(dz).toPrecision(4)}</dd>
     <dt>Approximation p/(4πε₀z²), in k q/d</dt><dd class="cV">${Vap(dz).toPrecision(4)}</dd>`;
 }
+/* ---------- dipole field-line picture (−q at z = −d/2, +q at z = +d/2; lengths in units of d) ---------- */
+const df=$('#dpF');
+function drawDF(){
+  const {ctx,w,h}=fit(df),c=col();ctx.clearRect(0,0,w,h);
+  const HW=2.6,s=w/(2*HW),HH=h/(2*s),X=x=>w/2+x*s,Y=y=>h/2-y*s;
+  const Ef=(x,y)=>{let ex=0,ey=0;for(const [cx,q] of [[.5,1],[-.5,-1]]){const dx=x-cx,dy=y,r2=dx*dx+dy*dy,r3=r2*Math.sqrt(r2);ex+=q*dx/r3;ey+=q*dy/r3;}return[ex,ey];};
+  const tr=a=>{let x=.5+.06*Math.cos(a),y=.06*Math.sin(a);const P=[[x,y]],st=.012;
+    for(let k=0;k<4000;k++){let [ex,ey]=Ef(x,y),m=Math.hypot(ex,ey);const mx=x+st/2*ex/m,my=y+st/2*ey/m;[ex,ey]=Ef(mx,my);m=Math.hypot(ex,ey);x+=st*ex/m;y+=st*ey/m;P.push([x,y]);
+      if(Math.hypot(x+.5,y)<.05)return{P,end:true};if(Math.abs(x)>HW+.2||Math.abs(y)>HH+.2)return{P,end:false};}return{P,end:false};};
+  // Lines leave +q evenly spaced. A line that leaves the frame has a mirror image (x → −x) arriving at −q,
+  // so both charges show lines on all sides, as they must.
+  const lines=[],n=16;
+  for(let k=0;k<n;k++){const L=tr((k+.5)/n*2*Math.PI);lines.push({P:L.P,dir:1});if(!L.end)lines.push({P:L.P.map(([x,y])=>[-x,y]).reverse(),dir:1});}
+  ctx.strokeStyle=c.grid;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,Y(0)+.5);ctx.lineTo(w,Y(0)+.5);ctx.stroke();
+  ctx.fillStyle=c.muted;ctx.font=`italic 13px ${FONT}`;ctx.textAlign='right';ctx.fillText('z',w-8,Y(0)+16);
+  ctx.save();ctx.strokeStyle=c.muted;ctx.fillStyle=c.muted;ctx.lineWidth=1.1;ctx.globalAlpha=.75;
+  for(const L of lines){const P=L.P.map(([x,y])=>[X(x),Y(y)]),sl=[0];ctx.beginPath();
+    P.forEach((p,i)=>{if(i){ctx.lineTo(p[0],p[1]);sl.push(sl[i-1]+Math.hypot(p[0]-P[i-1][0],p[1]-P[i-1][1]));}else ctx.moveTo(p[0],p[1]);});ctx.stroke();
+    const tot=sl[sl.length-1],mg=22;if(tot<2*mg)continue;const kk=Math.max(1,Math.round((tot-2*mg)/110)),g=(tot-2*mg)/kk;let i=0;
+    for(let j=0;j<kk;j++){const at=mg+g*(j+.5);while(i<sl.length-2&&sl[i+1]<at)i++;const a=P[i],b=P[i+1],t=(at-sl[i])/((sl[i+1]-sl[i])||1),x=a[0]+(b[0]-a[0])*t,y=a[1]+(b[1]-a[1])*t;
+      let dx=b[0]-a[0],dy=b[1]-a[1];const m=Math.hypot(dx,dy)||1;dx/=m;dy/=m;ctx.beginPath();ctx.moveTo(x+dx*5,y+dy*5);ctx.lineTo(x-dx*4-dy*3.5,y-dy*4+dx*3.5);ctx.lineTo(x-dx*4+dy*3.5,y-dy*4-dx*3.5);ctx.closePath();ctx.fill();}}
+  ctx.restore();
+  // dipole moment p, from − to +
+  arrow(ctx,X(-.32),Y(0)+22,X(.32),Y(0)+22,c.ink,2,null,9);ctx.fillStyle=c.ink;ctx.font=`italic 600 14px ${FONT}`;ctx.textAlign='center';ctx.fillText('p',X(0),Y(0)+40);
+  for(const [cx,q] of [[.5,1],[-.5,-1]]){ctx.beginPath();ctx.arc(X(cx),Y(0),11,0,7);ctx.fillStyle=q>0?c.pos:c.neg;ctx.fill();ctx.fillStyle='#fff';ctx.font=`700 15px ${FONT}`;ctx.textAlign='center';ctx.fillText(q>0?'+':'−',X(cx),Y(0)+5);}
+  // the point on the axis from the slider; E there points along p
+  ctx.font=`600 13px ${FONT}`;ctx.fillStyle=c.e;
+  if(dz<HW-.15){const px=X(dz),L=Math.min(70,Math.max(26,34*Math.sqrt(Eex(dz)/Eex(1))));
+    arrow(ctx,px,Y(0),px+L,Y(0),c.e,2.6,null,10);ctx.beginPath();ctx.arc(px,Y(0),5,0,7);ctx.fillStyle=c.ink;ctx.fill();ctx.fillStyle=c.e;ctx.textAlign='left';ctx.fillText('P',px+3,Y(0)-10);}
+  else{const px=w-10;arrow(ctx,px-34,Y(0)-16,px,Y(0)-16,c.e,2,null,8);ctx.textAlign='right';ctx.fillText('P at z = '+dz.toFixed(1)+' d',px,Y(0)-26);}
+  ctx.textAlign='left';
+}
 $('#dpZ').oninput=e=>{dz=lx(+e.target.value);drawDP();};
-$('#dpShow').onclick=()=>{loadPreset('Dipole');document.getElementById('basics').scrollIntoView({behavior:'smooth'});};
 
 
 /* ---------- Coulomb vs gravity ---------- */
@@ -1250,7 +1282,7 @@ function drawCG(){
     <dt>Ratio F<sub>electric</sub>/F<sub>gravity</sub></dt><dd><b>${Fe===0?'0':sci(ratio,'')}</b></dd>`;
   $('#cgNote').textContent=cgP.note+(Fe!==0?' Both forces scale as 1/r², so moving the slider changes them together and the ratio stays the same.':'');
 }
-const ro=new ResizeObserver(()=>{drawPG();drawDP();drawCG();});ro.observe(cv);ro.observe(dp);ro.observe($('#cg'));
+const ro=new ResizeObserver(()=>{drawPG();drawDP();drawCG();});ro.observe(cv);ro.observe(dp);ro.observe(df);ro.observe($('#cg'));
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{drawPG();drawDP();drawCG();});
 new MutationObserver(()=>{drawPG();drawDP();drawCG();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawPG();drawDP();drawCG();});
